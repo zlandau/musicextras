@@ -90,16 +90,22 @@ module MusicExtras
     end
 
     def set_album_cover(cover)
-      # XXX: Would be nice to use cover data directly instead of having to write
-      #      to a file, but I think you need gdkimlib's create_image_from_data,
-      #      which is not implemented yet
+      @album_image.pixbuf = process_image(cover)
+    end
 
-      if cover.nil?
-        @album_image.set(Gdk::Pixbuf.new(@no_image_available))
+    def set_artist_image(image)
+      @artist_image.pixbuf = process_image(image)
+    end
+
+    def process_image(data)
+      if data.nil?
+	ret = Gdk::Pixbuf.new(@no_image_available)
       else
-	file = write_image_to_file(cover, 'musicextras_cover.img')
 	begin
-	  pixbuf = Gdk::Pixbuf.new(file)
+	  loader = Gdk::PixbufLoader.new
+	  loader.write(data)
+
+	  pixbuf = loader.pixbuf
           if pixbuf.height > pixbuf.width
             scale_h = @image_size
             scale_w = ( ( pixbuf.width.to_f / pixbuf.height.to_f ) * @image_size).round
@@ -108,15 +114,19 @@ module MusicExtras
             scale_w = @image_size
           end
 	  pixbuf = pixbuf.scale(scale_w, scale_h)
-	  @album_image.set(pixbuf)
+	  ret = pixbuf
+
+	  loader.close
 	rescue RuntimeError
 	  # probably couldnt recognize the file type, call ourselves with nil
-	  set_album_cover(nil)
+	  process_image(nil)
 	end
       end
+
+      ret
     end
 
-    def set_artist_image(image)
+    def set_artist_image2(image)
       if image.nil?
         @artist_image.set(Gdk::Pixbuf.new(@no_image_available))
       else
