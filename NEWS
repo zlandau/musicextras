@@ -1,5 +1,7 @@
 Changes in 0.6.5
     - The Song Change dialog information defaults to current song
+    - Updated AllMusic plugin, again
+    - Added track listing support
 
 Changes in 0.6.4
     - AllMusic plug fixed after allmusic.com site redesign
