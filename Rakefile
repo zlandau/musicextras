@@ -40,6 +40,8 @@ task :release do
   fail "Set VERSION environmental variable" unless ENV['VERSION']
   dir = "../musicextras-#{ENV['VERSION']}"
   sh "cp -r doc #{SITE_DIR}"
+  svn ci
+  sh "svn copy file:///home/kapheine/svn/musicextras/musicextras file:////home/kapheine/svn/musicextras/musicextras-#{ENV['VERSION']}"
   sh "svn export . #{dir}"
   sh "svn log -r HEAD:1 -v > #{dir}/ChangeLog"
   sh "cp NEWS #{dir}/ChangeLog #{SITE_DIR}"
