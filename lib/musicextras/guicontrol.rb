@@ -177,7 +177,7 @@ module MusicExtras
       when 'album_review'
         @gui.set_review(data)
       when 'album_year'
-	@gui.set_album_year(data)
+	@gui.set_album_year(data) if data != ''
       when 'album_tracks'
 	@gui.set_tracks(data)
       else
