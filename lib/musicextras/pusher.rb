@@ -214,9 +214,11 @@ module MusicExtras
         end
         opts.on("-L", "--list-fetchers", _("display available fetchers")) do
           puts _("Valid fetchers:")
-          @valid_fetchers.each do |x|
-            puts "\t* #{x}"
-          end
+	  @valid_fetchers.sort_by do |f|
+	    @fetcher_order.index(f) || 99999
+	  end.each do |x|
+	    puts "\t* #{x}"
+	  end
           exit 0
         end
         opts.on("-I", "--include-plugins LIST", Array,
@@ -459,7 +461,7 @@ module MusicExtras
     ### Sends ALBUM_TRACKS => Text tag to queue if tracks are found,
     ### nil otherwise
     def handle_album_tracks
-      output_tag('ALBUM_TRACKS', _('Retrieving album tracks..')) if @options.gui
+      output_tag('STATUS', _('Retrieving album tracks..')) if @options.gui
 
       if @options.album && @options.artist
 	album = Album.new(@options.album, @options.artist)
@@ -484,6 +486,34 @@ module MusicExtras
       end
 
       output_tag('ALBUM_TRACKS', tracks, false)
+    end
+
+    ### Sends ALBUM_YEAR => Text tag to queue if found, nil otherwise
+    def handle_album_year
+      output_tag('STATUS', _('Retrieving album year..')) if @options.gui
+
+      if @options.album && @options.artist
+	album = Album.new(@options.album, @options.artist)
+
+	begin
+	  year = album.year
+
+	  unless year
+	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
+	      year = Album.new(@options.album, a).year
+	    end
+	  end
+
+	rescue DataAccessor::AccessorNotImplemented
+	  year = nil
+	end
+
+      else
+	info _('Notice: not retrieving album year (missing album or artist)')
+	year = nil
+      end
+
+      output_tag('ALBUM_YEAR', year, false)
     end
 
     ### Sends BIOGRAPHY => Bio_Data if found
