@@ -89,7 +89,8 @@ module MusicExtras
 
       if @options.run_tests == true
 	puts "Test results:"
-	MusicSite::run_tests do |name, passed, msg|
+	@options.plugins.each do |plugin|
+	  passed, msg = MusicExtras.const_get(plugin).new.test()
 	  if passed
 	    info = "passed"
 	  elsif passed == false
@@ -98,7 +99,7 @@ module MusicExtras
 	    info = "not implemented"
 	  end
 
-	  puts "\t* %-20s [%s]" % [name, info]
+	  puts "\t* %-20s [%s]" % [plugin, info]
 	end
 	exit 0
       end
@@ -317,9 +318,6 @@ module MusicExtras
     ### Uses the command line options to create appropriate Song, Album, Artist,
     ### etc. Sends the tags to the queue as they are retrieved
     def retrieve_data
-      # XXX: yeah, so, fuck threads. if i run this shit in a thread, the program just
-      # quits somewhere in song.lyrics. no error or anything. so fuck threads.
-
       clear_old_tags if @options.gui
 
       MusicSite::activate_plugins(@options.plugins)

@@ -155,6 +155,14 @@ module MusicExtras
         end
     end
 
+    def self.run_tests
+      @@plugins.each do |t|
+	plugin = MusicExtras.const_get(t.to_s)
+	results = plugin.new.test
+	yield([plugin.to_s.split('::')[1], results[0], results[1]])
+      end
+    end
+
     ### Prints in the following format: 'MusicSite: (url)'
     def to_s
       "#{@name} [#{@url}]"
@@ -256,6 +264,14 @@ module MusicExtras
     ### Returns a string of the form: Source: SiteName [URL]
     def source
       "\n\nSource: #{self.to_s}\n"
+    end
+
+    ## If plugin passes, returns an array of [true, []]
+    ## If plugin failes, returns an array of [false, msgs] where msgs is an
+    ## array of strings describing the failed tests
+    ## If plugin doesn't implement tests, don't override this
+    def test
+      [nil, []]
     end
 
   end
