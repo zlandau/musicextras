@@ -11,6 +11,8 @@ class TC_AccessorData < Test::Unit::TestCase
 
   def setup
     @a = MusicExtras::AccessorData.new(self, :accessor_method, '/cache/path')
+
+    MusicExtras::Debuggable::setup()
   end
 
   def accessor_method(param)

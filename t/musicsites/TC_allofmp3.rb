@@ -15,6 +15,8 @@ class TC_Allofmp3 < Test::Unit::TestCase
 
     @site.artist = Artist.new('')
     @site.album = Album.new('', '')
+
+    Debuggable::setup()
   end
 
   def test_inheritence

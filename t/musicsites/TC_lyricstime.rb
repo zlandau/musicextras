@@ -18,6 +18,8 @@ class TC_LyricsTime < Test::Unit::TestCase
 
     @site.song = Song.new('', '')
     @site.song.album = Album.new('', '')
+
+    Debuggable::setup()
   end
 
   def test_inheritence

@@ -6,11 +6,14 @@
 
 require 'test/unit'
 require 'musicextras/dataaccessor'
-require 'musicextras/config'
+require 'musicextras/mconfig'
+require 'musicextras/musicsite'
 require 'fileutils'
 
 class TestPlugin
+  attr_accessor :name
   def initialize
+    @name = 'TestPlugin'
     TestSong::register_plugin(self, :get_lyrics, 'TestPlugin/get_lyrics')
     TestSong::register_plugin(self, :get_lyrics2, 'TestPlugin/get_lyrics2')
   end
@@ -25,7 +28,9 @@ class TestPlugin
 end
 
 class TestPlugin2
+  attr_accessor :name
   def initialize
+    @name = 'TestPlugin2'
     TestSong::register_plugin(self, :get_lyrics, 'TestPlugin2/get_lyrics')
   end
 
@@ -35,12 +40,14 @@ class TestPlugin2
 end
 
 class TestPlugin3
+  attr_accessor :name
   def initialize
+    @name = 'TestPlugin3'
     TestArtist::register_plugin(self, :get_artist_image, '/TestPlugin3/cache')
   end
 
   def get_artist_image(artist)
-    return "TestPlugin3: #{artist.name}"
+    return "TestPlugin3: " ##{artist.name}"
   end
 end
 
@@ -55,10 +62,10 @@ end
 
 class TestArtist < MusicExtras::DataAccessor
 
-  attr_accessor :name
+  #attr_accessor :name
   def initialize(name)
     super(false)
-    @name = name
+    #@name = name
   end
 end
 
@@ -66,9 +73,11 @@ class TC_DataAccessor < Test::Unit::TestCase
   include MusicExtras
 
   def setup
-    @config = MusicExtras::Config.instance
+    @config = MusicExtras::MConfig.instance
     @config['use_cache'] = false
-    MusicExtras::Config.instance['basedir'] = "test_dir"
+    MusicExtras::MConfig.instance['basedir'] = "test_dir"
+
+    MusicExtras::Debuggable::setup()
 
     @song = TestSong.new('MyTitle')
     @artist = TestArtist.new('MyArtist')
@@ -84,10 +93,7 @@ class TC_DataAccessor < Test::Unit::TestCase
     assert_equal(nil, @song.get_lyrics)
     assert_equal('blah', @song.get_lyrics2)
 
-    # XXX: I'm fucking sick of dealing with these failing. There is something
-    # about the interaction with the cache (yes, even when it is supposed to be
-    # inactive. These failing tests don't seem to affect anything else, so I'm
-    # commenting them out until I am in a better mood.
+    # XXX: I don't know why these fail.
     #TestPlugin2.new
     #assert_equal('TestPlugin2: MyTitle', @song.get_lyrics)
     #TestPlugin3.new

@@ -14,6 +14,8 @@ class TC_Atame < Test::Unit::TestCase
     @site = Atame.new
 
     @site.song = Song.new('', '')
+
+    Debuggable::setup()
   end
 
   def test_inheritence

@@ -14,6 +14,8 @@ class TC_Plyrics < Test::Unit::TestCase
     @site = Plyrics.new
 
     @site.song = Song.new('', '')
+
+    Debuggable::setup()
   end
 
   def test_inheritence

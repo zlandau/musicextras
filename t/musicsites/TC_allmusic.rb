@@ -17,6 +17,8 @@ class TC_AllMusic < Test::Unit::TestCase
 
     @site.artist = Artist.new('')
     @site.album = Album.new('', '')
+
+    Debuggable::setup()
   end
 
   def test_inheritence
@@ -177,6 +179,10 @@ class TC_AllMusic < Test::Unit::TestCase
     @site.album.title = 'No Control'
     @site.album.artist.name = 'Bad Religion'
     assert_equal("1989", @site.year(@site.album))
+  end
+
+  def test_test
+    assert(@site.test[0])
   end
 
 end

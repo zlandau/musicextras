@@ -36,6 +36,8 @@ class TC_MusicSite < Test::Unit::TestCase
 
   def setup
     @site = MusicSite.new('MusicSite', 'MusicSiteDefaultURL')
+
+    Debuggable::setup()
   end
 
   def test_attributes
@@ -111,12 +113,12 @@ class TC_MusicSite < Test::Unit::TestCase
     assert_match(/.*Global Preferences.*/, t.fetch_page('/preferences?hl=en'))
 
     i = InvalidTestSite.new
-    assert_nil(i.fetch_page('/whatever.html'))
+    assert_raises(SocketError) { i.fetch_page('/whatever.html') }
 
     # we would check for invalid .coms, but oh yeah, fuck verisign
     assert_match(/.*Yahoo.*/, t.fetch_page('http://www.yahoo.com'))
 
-    assert_equal("\nSource: TestSite [www.google.com]\n", t.source())
+    assert_match(/.*Source: TestSite \[www.google.com\].*/m, t.source())
 
   end
 
