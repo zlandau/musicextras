@@ -273,7 +273,6 @@ module MusicExtras
     def test
       [nil, []]
     end
-
   end
 
 end

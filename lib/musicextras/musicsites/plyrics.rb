@@ -108,6 +108,21 @@ module MusicExtras
       debug(1, "could not find #{@song.title}")
       return nil
     end
+
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("Bouncing Souls")
+      song = Song.new("True Believers", artist)
+
+      if !lyrics(song)
+	passed = false
+	problems << "lyrics"
+      end
+
+      [passed, problems]
+    end
   end
 
 end

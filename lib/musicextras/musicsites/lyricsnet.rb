@@ -110,5 +110,20 @@ module MusicExtras
       debug(1, "could not get song url for #{@song.title} by #{@song.artist.name}")
       return nil
     end
+
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("Queen")
+      song = Song.new("Death on Two Legs", artist)
+
+      if !lyrics(song)
+	passed = false
+	problems << "lyrics"
+      end
+
+      [passed, problems]
+    end
   end
 end

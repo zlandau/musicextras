@@ -161,6 +161,26 @@ module MusicExtras
       debug(1, "could not find cover for #{@song.album.title} by #{@song.artist.name}")
       return nil
     end
-  end
 
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("Guns 'n Roses")
+      album = Album.new("Appetite for Destruction", artist)
+      song = Song.new("Sweet Child O'Mine", artist)
+
+      if !lyrics(song)
+	passed = false
+	problems << "lyrics"
+      end
+      if !cover(album)
+	passed = false
+	problems << "album cover"
+      end
+
+      [passed, problems]
+    end
+
+  end
 end

@@ -177,6 +177,25 @@ module MusicExtras
       return nil
     end
 
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("The Beatles")
+      album = Album.new("Please Please Me", artist)
+
+      if !image(artist)
+	passed = false
+	problems << "artist image"
+      end
+      if !cover(album)
+	passed = false
+	problems << "album cover"
+      end
+
+      [passed, problems]
+    end
+
   end
 end
 

@@ -107,6 +107,21 @@ module MusicExtras
       debug(1, "get_song_url: could not find #{@song.title}")
       return nil
     end
+
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("Daniel Andrea")
+      song = Song.new("Uno Quiere", artist)
+
+      if !lyrics(song)
+	passed = false
+	problems << "lyrics"
+      end
+
+      [passed, problems]
+    end
   end
 
 end

@@ -6,6 +6,7 @@ Changes in 0.6.5
     - Added checking for connection-down
     - Added 'Fill from File' to Song Change dialog
     - Added greylist entry timeouts
+    - Added integrated plugin testing (-T)
 
 Changes in 0.6.4
     - AllMusic plug fixed after allmusic.com site redesign

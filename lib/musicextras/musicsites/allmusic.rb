@@ -376,6 +376,45 @@ module MusicExtras
 	exit 100
       end
     end
-    
+ 
+    def test
+      passed = true
+      problems = []
+
+      artist = Artist.new("Bob Dylan")
+      album = Album.new("Blood on the Tracks", artist)
+
+      if !image(artist)
+	passed = false
+	problems << "artist image"
+      end
+      if !cover(album)
+	passed = false
+	problems << "album cover"
+      end
+      if !biography(artist)
+	passed = false
+	problems << "biography"
+      end
+      if !review(album)
+	passed = false
+	problems << "review"
+      end
+      if !years_active(artist)
+	passed = false
+	problems << "years active"
+      end
+      if !tracks(album)
+	passed = false
+	problems << "tracks"
+      end
+      if !year(album)
+	passed = false
+	problems << "album year"
+      end
+
+      [passed, problems]
+    end
+
   end
 end
