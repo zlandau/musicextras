@@ -171,7 +171,9 @@ module MusicExtras
 
       threads = []
 
-      Thread.abort_on_exception = true if @config and @config['debug_level'] > 1
+      if @config && @config['debug_level'] && @config['debug_level'] > 1
+	Thread.abort_on_exception = true
+      end
       
       accessors.each do |a|
 	
