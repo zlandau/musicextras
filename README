@@ -25,6 +25,11 @@ should be, etc, there.
  ($ su)
   # ruby setup.rb install
 
+Or, if you don't use any options, you can just do
+
+ ($ su)
+  # ruby setup.rb
+  
 You probably want to edit RUBYLIB/musicextras/musicextrasrc.rb. See Usage below.
 
 = Upgrading
