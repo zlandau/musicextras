@@ -1165,7 +1165,7 @@ class Installer
   end
 
   def ruby_scripts
-    collect_filenames_auto().select {|n| /\.rb\z/ =~ n }
+    collect_filenames_auto().select {|n| /(\.rb|\.glade)\z/ =~ n }
   end
   
   # picked up many entries from cvs-1.11.1/src/ignore.c
