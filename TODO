@@ -5,8 +5,4 @@ GUI
     - Threading in musicextras would be nice. There were problems with it, so
       I took it out, but I would like to give it another shot.
     - Fix incremental searching (allow spaces, etc)  
-    - Add configuration screen? I'm not convinced I want this yet.
 Plugins
-    - Add support for album year and whatnot? Dunno.
-    - Plugins should catch exceptions so other plugins can still run
-    - Detect when connection is down and don't add things to greylist

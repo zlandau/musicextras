@@ -189,6 +189,11 @@ module MusicExtras
 	    end
 	  rescue SocketError => e
 	    Thread.current[:connection_error] = e
+	  rescue => e
+	    debug(1, "#{a.plugin.name}.#{a.accessor} failed: #{e.class}: #{e}")
+	    if @config && @config['debug_level'] && @config['debug_level'] > 1
+	      raise
+	    end
 	  end
 	end
 
