@@ -1,10 +1,9 @@
 #!/usr/bin/ruby -w
 #
-# allmusic - www.allmusic.com implementation of MusicSite
+# Allofmp3 - www.allofmp3.com implementation of MusicSite
 #
-# version: $Id: allmusic.rb 331 2004-07-07 22:48:11Z kapheine $
-#
-# Copyright (C) 2003-2004 Zachary P. Landau <kapheine@hypa.net>
+# Copyright (C) 2003-2004 Paul-henri Ferme <paul-henri.ferme@noos.fr>
+#                         Zachary P. Landau <kapheine@hypa.net>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -36,7 +35,7 @@ module MusicExtras
 
     register()
 
-    NAME = 'allofmp3'
+    NAME = 'Allofmp3'
     URL = 'www.allofmp3.com'
     DESCRIPTION = 'Artist images, album covers for many genres'
 
@@ -45,9 +44,6 @@ module MusicExtras
 
       Artist::register_plugin(self, :image, CACHE_PATH['artist_image'])
       Album::register_plugin(self, :cover, CACHE_PATH['album_cover'])
-
-#      fetch_page("http://www.allofmp3.com/shares/setencode.html?changeencode_mp3=ENG&tourl=http%3A%2F%2Fwww.allofmp3.com%2F&r=1215337717")
-
     end
 
     # Fetches artist image from site, returning the image as a binary string
@@ -101,7 +97,6 @@ module MusicExtras
       body = fetch_page("http://search.allofmp3.com/search.shtml", post)
 
       if body !~ /.*the search engine found 0 documents.*/
-#      if body !~ /.*(the search engine found 0 documents|??? ?????? ? ?????? ?????? ?? ???? ??????? ?? ?????? ?????????).*/
 	body.scan(/<a href="([^"]*)">([^<]*)<\/a><\/td>/mi) do |url, name|  
           debug_var { :url }
 	  if match?(@artist.name, name)
@@ -170,8 +165,7 @@ module MusicExtras
 
       page.scan(/<td valign="top"[^<]*<img src="([^"]*)" border=1><\/td>/i) do |image_url|
 	debug_var { :image_url }
-	return "#{image_url}"
-	#return image_url
+	return image_url.to_s
       end 
 
       debug(1, "could not find cover for #{@album.title} by #{@album.artist.name}")
