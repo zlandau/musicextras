@@ -165,7 +165,10 @@ module MusicExtras
     def retrieve_data( accessors ) # :nodoc:
       debug_enter()
       mutex = Mutex.new
-      data = NO_DATA
+      
+      data = NO_DATA		# the data retrieved
+      accessor_data = nil	# the accessor data for the plugin that 'won'
+
       threads = []
 
       Thread.abort_on_exception = true if @config and @config['debug_level'] > 1
@@ -179,6 +182,7 @@ module MusicExtras
 	    mutex.synchronize do 
 	      if ( (data == NO_DATA) && (tmp_data) )
 		data = tmp_data
+		accessor_data = a
 	      end
 	    end
 	  rescue SocketError => e
@@ -194,14 +198,17 @@ module MusicExtras
 
 	sleep(0.1)
 
-	error = false
+	# don't give up until all threads are done
 	threads.each do |thread|
 	  alive = true if thread.alive?
 	end
+
+	# if we got data, return immediately
 	unless data == NO_DATA
-	  debug(1, "Retrieve_data successful")
+	  debug(1, "retrieve_data successful [#{accessor_data.plugin.name}:#{accessor_data.accessor}]")
 	  return data
 	end
+
 	unless alive
 	  # See if they all got connection errors
 	  error = true
@@ -209,9 +216,11 @@ module MusicExtras
 	  if error
 	    raise threads[0][:connection_error]
 	  end
-	  debug(1, "Retrieve_data unsuccessful")
+
+	  debug(1, "retrieve_data unsuccessful")
 	  return nil
 	end
+
       end
     end
 
