@@ -114,7 +114,8 @@ module MusicExtras
         'years_active' => '{ARTIST}/years_active.txt',
         'album_cover'  => '{ARTIST}/covers/{ALBUM}.img',
         'album_review' => '{ARTIST}/reviews/{ALBUM}.txt',
-	"album_tracks" => '{ARTIST}/tracks/{ALBUM}.txt'
+	'album_tracks' => '{ARTIST}/tracks/{ALBUM}.txt',
+	'album_years'  => '{ARTIST}/years/{ALBUM}.txt'	
     }
 
     NAME = "RedefineNAME"

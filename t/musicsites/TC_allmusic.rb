@@ -167,4 +167,16 @@ class TC_AllMusic < Test::Unit::TestCase
     assert_match(/17\. Badge of Pride/m, tracks)
   end
 
+  def test_album_year
+    @site.artist = nil
+
+    @site.album.title = 'Flood'
+    @site.album.artist.name = 'They Might Be Giants'
+    assert_equal("1990", @site.year(@site.album))
+
+    @site.album.title = 'No Control'
+    @site.album.artist.name = 'Bad Religion'
+    assert_equal("1989", @site.year(@site.album))
+  end
+
 end

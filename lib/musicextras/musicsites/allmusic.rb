@@ -52,6 +52,7 @@ module MusicExtras
       Album::register_plugin(self, :cover, CACHE_PATH['album_cover'])
       Album::register_plugin(self, :review, CACHE_PATH['album_review'])
       Album::register_plugin(self, :tracks, CACHE_PATH['album_tracks'])
+      Album::register_plugin(self, :year, CACHE_PATH['album_year'])
     end
 
     # Fetches artist image from site, returning the image as a binary string
@@ -321,7 +322,30 @@ module MusicExtras
 	return nil
       end
     end
-      
+ 
+    def year(new_album)
+      @album = new_album
+      @artist = new_album.artist
+
+      album_url = get_album_url()
+      debug_var { :album_url }
+      return nil if !album_url
+      page = fetch_page(album_url, nil, MusicSite::USERAGENTS['Mozilla'])
+      if !page
+	debug(1, "could not fetch album page for #{@artist.name}")
+	return nil
+      end
+      check_for_violation(page)
+
+      ma = page.match(/<span>Release Date.*?sub-text.*?(\d{4,4})</)
+
+      if ma
+	return ma[1]
+      else
+	debug(1, "No release year found for #{@album.title} by #{@artist.name}")
+	return nil
+      end
+    end
 
     # Fetches the album cover url. Calls get_album_url
     def get_album_cover_url # :nodoc:
