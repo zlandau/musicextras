@@ -71,7 +71,7 @@ module MusicExtras
 
       # May specify the order things are fetched in. Anything not listed
       # here will go in any order after those items in the list
-      @fetcher_order = %w(song_info lyrics artist_image album_cover year)
+      @fetcher_order = %w(song_info lyrics artist_image album_cover album_year)
 
       if args.length == 0
         $stderr.puts "%s: musicextras <options>" % _("Usage")
