@@ -75,6 +75,8 @@ class TC_Plyrics < Test::Unit::TestCase
     assert_nil(lyrics)
     lyrics = @site.lyrics(Song.new('Wrong', '98 Mute'))
     assert_match(/.*I know \'cause I.*/, lyrics)
+    lyrics = @site.lyrics(Song.new("I'm a wicked one", "Hives"))
+    assert_match(/.*I'm a wicked one.*/, lyrics)
   end
   
   def test_cached_as
