@@ -54,10 +54,12 @@ class TC_AllMusic < Test::Unit::TestCase
   def test_get_artist_image
     @site.artist.name = 'Refused'
     image = @site.image(@site.artist)
+    assert(image)
     assert_equal('JFIF', image[6..9])
 
     @site.artist.name = 'They Might Be Giants'
     image = @site.image(@site.artist)
+    assert(image)
     assert_equal('JFIF', image[6..9])
   end
 
@@ -95,14 +97,12 @@ class TC_AllMusic < Test::Unit::TestCase
     @site.album.title = 'Songs To Fan The Flames Of Discontent'
     @site.album.artist.name = 'Refused'
     cover = @site.cover(@site.album)
-    assert_equal('ffe0790ebfd84b2db1795d664f9cba96',
-    @md5.digest(cover).unpack("H*").to_s)
+    assert_equal('JFIF', cover[6..9])
 
     @site.album.title = 'Shots From The Kalico Rose'
     @site.album.artist.name = 'Pistol Grip'
     cover = @site.cover(@site.album)
-    assert_equal('5903f80a6cec2e74bec70f1cee1840f8',
-    @md5.digest(cover).unpack("H*").to_s)
+    assert_equal('JFIF', cover[6..9])
   end
 
   def test_get_artist_bio

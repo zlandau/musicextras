@@ -17,6 +17,9 @@
 ## information to fetch a piece of data
 @config['verbose'] = false
 
+## Timeout for http retrieves.  Increase this if you are prone to timeouts
+@config['timeout'] = 90
+
 ## What information should be fetched? Use musicextras --list-fetchers for a list
 ## Defaults to all available fetchers
 #@config['fetchers'] = %w(lyrics artist_image album_cover biography years_active album_review)

@@ -40,7 +40,7 @@ module MusicExtras
     URL = 'www.allmusic.com'
     DESCRIPTION = 'Artist images, album covers, years active, biography and album reviews for many genres'
 
-    ACCESS_VIOLATION_MESSAGE = "Through traffic and monitoring of our websites" # see check_for_violation
+    ACCESS_VIOLATION_MSG = "Through traffic and monitoring of our websites" # see check_for_violation
 
     def initialize
       super(NAME, URL)
@@ -68,10 +68,12 @@ module MusicExtras
       page = get_artist_page
       return nil unless page
       check_for_violation(page)
-      page.scan(/<td valign="top">.*?<img src="http:\/\/image.allmusic.com\/(.*?)" alt=/) do |image_url|
+      page.scan(/<td valign="top">.*?<img src="http:\/\/image.allmusic.com\/([^"]*)"/) do |image_url|
 	debug_var { :image_url }
-	return fetch_page("http://image.allmusic.com/#{image_url}")
+	return fetch_page("http://image.allmusic.com/#{image_url}", nil, MusicSite::USERAGENTS['Mozilla'])
       end 
+
+      debug(1, "Could not find image url for #{artist.name}")
 
       nil
     end
@@ -92,7 +94,7 @@ module MusicExtras
       album_cover_url = get_album_cover_url
       debug_var { :album_cover_url }
       return nil unless album_cover_url
-      return fetch_page("http://image.allmusic.com/#{album_cover_url}")
+      return fetch_page("http://image.allmusic.com/#{album_cover_url}", nil, MusicSite::USERAGENTS['Mozilla'])
     end
 
     # Fetches artist biography info, returning nil if none is found
@@ -110,7 +112,7 @@ module MusicExtras
       ma = page.match(/<a HREF="([^"]*)">Biography<\/a>/i)
 
       if ma
-	bio_page = fetch_page(ma[1])
+	bio_page = fetch_page(ma[1], nil, MusicSite::USERAGENTS['Mozilla'])
       else
 	debug(1, "could not find bio page for #{@artist.name}")
 	return nil
@@ -141,13 +143,13 @@ module MusicExtras
       return nil unless album_url
       debug_var { :album_url }
 
-      page = fetch_page(album_url)
+      page = fetch_page(album_url, nil, MusicSite::USERAGENTS['Mozilla'])
       check_for_violation(page)
       ma = page.match(/<a HREF="([^"]*)">Review<\/a>/i)
       if ma
 	url = ma[1]
 	debug_var { :url }
-	review_page = fetch_page(url)
+	review_page = fetch_page(url, nil, MusicSite::USERAGENTS['Mozilla'])
       else
 	debug(1, "could not find review page for #{@album.title} by #{@album.artist.name}")
 	return nil
@@ -192,13 +194,13 @@ module MusicExtras
       post = "sql=#{CGI::escape(@artist.name)}&P=amg&opt1=1"
       
       debug_var { :post }
-      body = fetch_page("/cg/amg.dll", post)
+      body = fetch_page("/cg/amg.dll", post, MusicSite::USERAGENTS['Mozilla'])
 
       if body =~ /.*Name Search Results for.*/
 	body.scan(/<a href="javascript:j\('(11:[^']*)'\)">([^<]*)<\/a>/mi) do |url, name|  
           debug_var { :url }
 	  if match?(@artist.name, name)
-	    return fetch_page("/cg/amg.dll?P=amg&sql=#{url}")
+	    return fetch_page("/cg/amg.dll?P=amg&sql=#{url}", nil, MusicSite::USERAGENTS['Mozilla'])
 	  else
 	    debug(1, "artist page for #{@artist.name} not found")
 	    return nil
@@ -230,7 +232,7 @@ module MusicExtras
       end
 
       disco_url = ma[1]
-      disco_page = fetch_page(disco_url)
+      disco_page = fetch_page(disco_url, nil, MusicSite::USERAGENTS['Mozilla'])
       unless disco_page
 	debug(1, "could not fetch discography page for #{@artist.name}")
 	return nil
@@ -247,7 +249,7 @@ module MusicExtras
       end
 
       album_pages.each do |url|
-	page = fetch_page(url)
+	page = fetch_page(url, nil, MusicSite::USERAGENTS['Mozilla'])
 	if page
 	  page.scan(/<a href="javascript:j\('(10:[^']*)'\)">([^<]*)<\/a><\/td>/) do |url, name|
 	    debug(5, "#{name} => #{url}")
@@ -288,11 +290,11 @@ module MusicExtras
       album_url = get_album_url()
       debug_var { :album_url }
       return nil if !album_url
-      page = fetch_page(album_url)
+      page = fetch_page(album_url, nil, MusicSite::USERAGENTS['Mozilla'])
       return nil if !page
       check_for_violation(page)
 
-      page.scan(/<td valign="top">.*?<img src="http:\/\/image.allmusic.com(.*?)" alt=/) do |image_url|
+      page.scan(/<td valign="top">.*?<img src="http:\/\/image.allmusic.com([^"]*)"/) do |image_url|
 	debug_var { :image_url }
 	return image_url[0]
       end 

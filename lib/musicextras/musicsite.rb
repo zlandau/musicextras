@@ -231,6 +231,7 @@ module MusicExtras
           verbose = $VERBOSE
           $VERBOSE = false
 	  Net::HTTP.start(host) do |http|
+	    http.read_timeout = @config['timeout']
             unless post
               response = http.get(path, params)
             else
