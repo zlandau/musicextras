@@ -27,11 +27,11 @@ require 'musicextras/debuggable'
 
 module MusicExtras
   Version = ''
+  DATA_DIR = File.join(ENV['RUBYDATA'], 'musicextras')
 
   ### Handles config file loading and access
   class MConfig
     include Singleton
-
 
     VALID = %w(basedir log verbose fetchers plugins use_cache gui_host 
                artist_pre_regex artist_cond_regex album_pre_regex window_w

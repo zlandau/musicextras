@@ -39,9 +39,7 @@ module MusicExtras
       super(control)
 
       Gtk.init
-      @glade = GladeXML.new(File.find_in_path('musicextras/gui/musicextras.glade',
-                                              $LOAD_PATH), nil, 'musicextras-gui') { |handler| method(handler)}
-
+      @glade = GladeXML.new(File.join(DATA_DIR, "musicextras.glade"), nil, "musicextras-gui") { |handler| method(handler) }
       @title = @artist = @album = nil
       init_main_window()
       init_change_song_dialog()
@@ -145,7 +143,7 @@ module MusicExtras
       @statusbar = @glade.get_widget('statusbar')
 
       @image_size = @config['image_size'] || 200
-      @no_image_available = File.find_in_path('musicextras/gui/no_image.png', $LOAD_PATH)
+      @no_image_available = File.join(DATA_DIR, 'no_image.png')
 
       set_album_cover(nil)
       set_artist_image(nil)

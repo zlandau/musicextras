@@ -16,10 +16,15 @@ version = ma ? ma[1] : "cvs"
 
 tmpfile = File.open('musicextras.tmp', 'w')
 File.open(curr_srcdir + '/lib/musicextras/mconfig.rb') do |f|
+  
   while line = f.gets
-    ma = line.match(/^(\s+)Version/)
+    ma = line.match(/^(\s+)(Version|DATA_DIR)/)
     if ma
-      tmpfile.write "#{ma[1]}Version = \'#{version}\'\n"
+      if ma[2] == "Version"
+	tmpfile.write "#{ma[1]}Version = \'#{version}\'\n"
+      elsif ma[2] == "DATA_DIR"
+	tmpfile.write "#{ma[1]}DATA_DIR = File.join('#{config('data-dir')}', 'musicextras')\n"
+      end
     else
       tmpfile.write line
     end
