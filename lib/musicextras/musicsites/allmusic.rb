@@ -199,7 +199,7 @@ module MusicExtras
       body = fetch_page("/cg/amg.dll", post, MusicSite::USERAGENTS['Mozilla'])
 
       if body =~ /.*Name Search Results for.*/
-	body.scan(/<a href="javascript:j\('(11:[^']*)'\)">([^<]*)<\/a>/mi) do |url, name|  
+	body.scan(/<a href="\/cg\/amg.dll\?p=amg&sql=(11:[^"]*)">([^<]*)<\/a>/mi) do |url, name|
           debug_var { :url }
 	  if match?(@artist.name, name)
 	    return fetch_page("/cg/amg.dll?P=amg&sql=#{url}", nil, MusicSite::USERAGENTS['Mozilla'])
@@ -253,7 +253,7 @@ module MusicExtras
       album_pages.each do |url|
 	page = fetch_page(url, nil, MusicSite::USERAGENTS['Mozilla'])
 	if page
-	  page.scan(/<a href="javascript:j\('(10:[^']*)'\)">([^<]*)<\/a><\/td>/) do |url, name|
+	  page.scan(/<a href="\/cg\/amg.dll\?p=amg&sql=(10:[^"]*)">([^<]*)<\/a>/mi) do |url, name|
 	    debug(5, "#{name} => #{url}")
 	    albums<< [name, url]
 	  end
@@ -304,7 +304,7 @@ module MusicExtras
 
       tracks = ""
       found = false
-      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="javascript:j\('[^']*'\)">([^<]*)<\/a>/m) do |num, name|
+      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">([^<]*)<\/a>/mi) do |num, name|
 	found = true
 	tracks += sprintf("%3i. %s\n", num, name)
       end
