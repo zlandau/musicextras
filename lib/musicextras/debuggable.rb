@@ -16,8 +16,18 @@ module MusicExtras
   module Debuggable
     DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
+    def self::setup
+      @config = MConfig.instance unless defined? @config
+      @config['debug_level'] ||= 1
+      FileUtils.mkdir_p @config['basedir']
+      file = File.join(@config['basedir'], "debug.log")
+      @config['debug_io'] = File.open(file, "a")
+      @config['debug_io'].sync = true
+      @config['debug_io'].puts ""
+    end
+
     def debug(level, msg, caller_depth=1)
-      @config = MConfig.instance unless @config
+      @config = MConfig.instance unless defined? @config
       $debug_mutex = Mutex.new unless defined? $debug_mutex
 
       meth = caller(caller_depth)[0].match(/\`(.*?)\'/)[1]

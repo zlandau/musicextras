@@ -53,7 +53,7 @@ module MusicExtras
       @gui = guiclass.new(self)
       @config = MConfig.instance
 
-      setup_debug()
+      Debuggable::setup()
       debug(1, "Running as: #{$PROGRAM_NAME} #{ARGV.join(' ')}")
 
       @hostname, @port = @config['gui_host'].split(':')
@@ -201,16 +201,6 @@ module MusicExtras
 	  @clients.delete(c)
 	end
       end
-    end
-
-    ### setup default debugging vars
-    def setup_debug
-      @config['debug_level'] ||= 1
-      FileUtils.mkdir_p @config['basedir']
-      file = File.join(@config['basedir'], "debug.log")
-      @config['debug_io'] ||= File.open(file, "a")
-      @config['debug_io'].sync = true
-      @config['debug_io'].puts ""
     end
 
     ### Parse the options, returning a has of options

@@ -61,7 +61,7 @@ module MusicExtras
     def initialize(args=ARGV)
       @config = MConfig.instance
 
-      setup_debug()
+      Debuggable::setup()
       debug(1, "Running as: #{$PROGRAM_NAME} #{ARGV.join(' ')}")
 
       @valid_fetchers = private_methods.collect do |x|
@@ -86,6 +86,22 @@ module MusicExtras
       end
 
       @output = STDOUT
+
+      if @options.run_tests == true
+	puts "Test results:"
+	MusicSite::run_tests do |name, passed, msg|
+	  if passed
+	    info = "passed"
+	  elsif passed == false
+	    info = "failed: #{msg.join(', ')}"
+	  elsif passed == nil
+	    info = "not implemented"
+	  end
+
+	  puts "\t* %-20s [%s]" % [name, info]
+	end
+	exit 0
+      end
 
       if @options.quit_after_parse == true
 	exit 0
@@ -134,12 +150,7 @@ module MusicExtras
 
     ### setup default debugging vars
     def setup_debug
-      @config['debug_level'] = 1
-      FileUtils.mkdir_p @config['basedir']
-      file = File.join(@config['basedir'], "debug.log")
-      @config['debug_io'] = File.open(file, "a")
-      @config['debug_io'].sync = true
-      @config['debug_io'].puts ""
+      Debuggable::setup()
     end
 
     ### Parse the options, returning a hash of options
@@ -268,6 +279,10 @@ module MusicExtras
           @config['debug_io'] = File.open(file, "a")
           @config['debug_io'].sync = true
         end
+
+	opts.on("-T", "--test", _("runs tests to see if plugins are working")) do
+	  @options.run_tests = true
+	end
 
         opts.on("-h", "--help", _("displays this usage")) do
           puts opts
