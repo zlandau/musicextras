@@ -109,13 +109,12 @@ class TC_MusicSite < Test::Unit::TestCase
 
   def test_fetch_page_and_source
     t = TestSite.new
-    assert_match(/.*Try our latest demos.*/, t.fetch_page('/about.html'))
+    assert_match(/.*Privacy Policy.*/, t.fetch_page('/about.html'))
     assert_match(/.*Global Preferences.*/, t.fetch_page('/preferences?hl=en'))
 
     i = InvalidTestSite.new
     assert_raises(SocketError) { i.fetch_page('/whatever.html') }
 
-    # we would check for invalid .coms, but oh yeah, fuck verisign
     assert_match(/.*Yahoo.*/, t.fetch_page('http://www.yahoo.com'))
 
     assert_match(/.*Source: TestSite \[www.google.com\].*/m, t.source())
