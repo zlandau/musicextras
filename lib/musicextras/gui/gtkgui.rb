@@ -209,9 +209,9 @@ module MusicExtras
     end
 
     def on_change_song_activate
-      @artist_label.text = @artist
-      @album_label.text = @album
-      @title_label.text = @title
+      @artist_label.text = @artist || ''
+      @album_label.text = @album || ''
+      @title_label.text = @title || ''
 
       @change_song_dialog.show
     end
