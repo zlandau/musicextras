@@ -36,7 +36,6 @@ require 'base64'
 require 'optparse'
 require 'ostruct'
 require 'rexml/document'
-require 'iconv'
 require 'fileutils'
 
 begin

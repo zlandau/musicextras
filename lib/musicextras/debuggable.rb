@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 #
-# debuggable - 
+# debuggable - provides debugging methods
 #
 # Copyright (C) 2004 Zachary P. Landau <kapheine@hypa.net>
 # All rights reserved.

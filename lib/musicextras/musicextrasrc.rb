@@ -22,7 +22,7 @@
 
 ## What information should be fetched? Use musicextras --list-fetchers for a list
 ## Defaults to all available fetchers
-#@config['fetchers'] = %w(lyrics artist_image album_cover biography years_active album_review)
+#@config['fetchers'] = %w(lyrics artist_image album_cover biography years_active album_review album_tracks album_year)
 
 ## What plugins should be used? Use musicextras --list-plugins for a list
 ## Defaults to all available plugins

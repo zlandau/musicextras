@@ -27,8 +27,6 @@ require 'musicextras/utils'
 require 'digest/md5'
 require 'net/http'
 require 'fileutils'
-require 'singleton'
-require 'iconv'
 
 module MusicExtras
 

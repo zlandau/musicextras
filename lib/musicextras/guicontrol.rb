@@ -35,7 +35,7 @@ require 'fileutils'
 
 autoload :GtkGui, 'musicextras/gui/gtkgui'
 
-# :stopdoc:
+# :stopdoc #
 module REXML
   class IOSource
     alias_method :_initialize, :initialize

@@ -23,15 +23,15 @@
 #
 
 require 'iconv'
-#begin
-  #require 'gettext'
-    #rescue LoadError
-  #end
+begin
+  require 'gettext'
+rescue LoadError
+end
 
 class String
   # Specifies the cutoff point for mangle()
-  # This should be, at the minimum, no more than the length of an mp3
-  # tag, since we will be getting our information from that often
+  # This should be, at the maximum, no more than the length of an mp3
+  # tag, since we will often be getting our information from them.
   # Shortening it further may produce better results in some cases, but
   # it is probably okay how it is
   MANGLE_CUTOFF_POINT = 22
