@@ -150,7 +150,11 @@ It'd be nice to have a Gui for a crossplatform toolkit, like wxWindows (hint hin
 
 = Bugs
 
-See the BUGS list for the full list. 
+If you are getting a lot (or only) failures, try testing the plugins by running
+"musicextras -T".  If any of the plugins fail, check the webpage to see if the
+problem is already known.  If not, send me an email and let me know.
+
+See the BUGS list for the full list.
 
 = Contact
 

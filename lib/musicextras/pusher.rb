@@ -91,7 +91,12 @@ module MusicExtras
 	exit_code = 0
 	puts "Test results:"
 	@options.plugins.each do |plugin|
-	  passed, msg = MusicExtras.const_get(plugin).new.test()
+	  begin
+	    passed, msg = MusicExtras.const_get(plugin).new.test()
+	  rescue Exception => e
+	    passed = false
+	    msg = [e.message]
+	  end
 	  if passed
 	    info = "passed"
 	  elsif passed == false
