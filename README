@@ -100,6 +100,9 @@ not attempt to download them again. Every once in a while you may want to clear
 this list in case some of the plugin sites add new content. To clear the list,
 run 'musicextras --clear-greylist'.
 
+If you are behind a proxy, defining the HTTP_PROXY environmental variable should
+work, but it is untested.  It doesn't yet support usernames or passwords.
+
 = Internationalization
 
 There are a few things to know about the internationalization support in

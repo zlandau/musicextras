@@ -238,7 +238,14 @@ module MusicExtras
           response = nil
           verbose = $VERBOSE
           $VERBOSE = false
-	  Net::HTTP.start(host) do |http|
+          conn = nil
+          if ENV['HTTP_PROXY']
+            uri_parse = URI.parse(ENV['HTTP_PROXY'])
+            conn = Net::HTTP.Proxy(uri_parse.host, uri_parse.port || 8080)
+          else
+            conn = Net::HTTP
+          end
+	  conn.start(host) do |http|
 	    http.read_timeout = @config['timeout']
             unless post
               response = http.get(path, params)
