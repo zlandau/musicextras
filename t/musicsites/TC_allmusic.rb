@@ -140,7 +140,8 @@ class TC_AllMusic < Test::Unit::TestCase
 
     @site.album.title = 'Control Me'
     @site.album.artist.name = 'Forgotten'
-    assert_nil(@site.review(@site.album))
+    #assert_nil(@site.review(@site.album))
+    assert_match(/.*no big secret to those.*/m, @site.review(@site.album))
 
     @site.album.title = 'Babylon and On'
     @site.album.artist.name = 'Squeeze'
