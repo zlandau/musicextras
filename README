@@ -120,7 +120,7 @@ song.
   require 'musicextras/musicsites/_load_sites'	# This loads the plugins
 
   MusicExtras::MusicSite::activate_plugins
-  puts MusicExtras::Song.new('I Palindrome I, 'They Might Be Giants').lyrics
+  puts MusicExtras::Song.new('I Palindrome I', 'They Might Be Giants').lyrics
 
 To see a list of available accessors after your plugins are loaded, try this:
 
