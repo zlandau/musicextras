@@ -1,7 +1,7 @@
 ###############################
 #### Musicextras config file
 ###############################
-@config = MusicExtras::Config.instance
+@config = MusicExtras::MConfig.instance
 
 ############################
 #### Client Configuration

@@ -22,7 +22,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-require 'musicextras/config'
+require 'musicextras/mconfig'
 require 'musicextras/debuggable'
 require 'musicextras/utils'
 require 'optparse'
@@ -66,13 +66,13 @@ module MusicExtras
     ### [+guiclass+] The class of the Gui to load. Defaults to GtkGui
     def initialize(guiclass=GtkGui, args=ARGV)
       @gui = guiclass.new(self)
-      @config = Config.instance
+      @config = MConfig.instance
 
       setup_debug()
       debug(1, "Running as: #{$PROGRAM_NAME} #{ARGV.join(' ')}")
 
       @hostname, @port = @config['gui_host'].split(':')
-      @port ||= Config::DEFAULT_GUI_PORT
+      @port ||= MConfig::DEFAULT_GUI_PORT
 
       @title = @artist = @album = nil
       @lyrics_file = nil
@@ -143,8 +143,12 @@ module MusicExtras
       end
     end
 
-    def text(text) # :nodoc:
-      @text = text.to_s
+    def text(item) # :nodoc:
+      @text = item.to_s 
+    end
+
+    def cdata(data) # :nodoc:
+      @text = data.to_s
     end
 
     def tag_end(item) # :nodoc:

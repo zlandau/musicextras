@@ -25,7 +25,7 @@
 
 require 'musicextras/accessordata'
 require 'musicextras/cache'
-require 'musicextras/config'
+require 'musicextras/mconfig'
 require 'musicextras/debuggable'
 require 'thread'
 
@@ -49,7 +49,7 @@ module MusicExtras
     # Setups up cache. Data Accessors should be sure to call super
     # [+use_cache+] set to false if you don't want to use the cache
     def initialize(use_cache=nil)
-      @config = Config.instance
+      @config = MConfig.instance
       @use_cache = use_cache || @config['use_cache']
 
       # initialize it even if we don't use cache, because we use some of

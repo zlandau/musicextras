@@ -1,6 +1,6 @@
 #!/usr/bin/ruby -w
 #
-# config - Configuration file handler
+# mconfig - Configuration file handler
 #
 # version: $Id: config.rb 320 2004-04-30 23:17:38Z kapheine $
 #
@@ -29,7 +29,7 @@ module MusicExtras
   Version = ''
 
   ### Handles config file loading and access
-  class Config
+  class MConfig
     include Singleton
 
 

@@ -22,7 +22,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-require 'musicextras/config'
+require 'musicextras/mconfig'
 require 'musicextras/utils'
 require 'digest/md5'
 require 'net/http'
@@ -127,7 +127,7 @@ module MusicExtras
     def initialize(name, url)
       @name = name
       @url = url
-      @config = Config.instance
+      @config = MConfig.instance
     end
 
     ### Register plugin with list of available plugins

@@ -22,7 +22,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-require 'musicextras/config'
+require 'musicextras/mconfig'
 
 module MusicExtras
 
@@ -41,7 +41,7 @@ module MusicExtras
     ### [+control+] the GuiControl for this gui
     def initialize(control)
       @control = control
-      @config = Config.instance
+      @config = MConfig.instance
     end
 
     ### Starts Gui

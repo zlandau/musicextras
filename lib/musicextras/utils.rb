@@ -23,10 +23,10 @@
 #
 
 require 'iconv'
-begin
-    require 'gettext'
-rescue LoadError
-end
+#begin
+  #require 'gettext'
+    #rescue LoadError
+  #end
 
 class String
   # Specifies the cutoff point for mangle()

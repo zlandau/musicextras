@@ -31,6 +31,7 @@ require 'musicextras/song'
 require 'musicextras/cache'
 require 'musicextras/guicontrol'
 require 'musicextras/debuggable'
+require 'musicextras/mconfig'
 require 'base64'
 require 'optparse'
 require 'ostruct'
@@ -59,7 +60,7 @@ module MusicExtras
 
     ### Parses arguments, +args+ defaults to ARGV
     def initialize(args=ARGV)
-      @config = Config.instance
+      @config = MConfig.instance
 
       setup_debug()
       debug(1, "Running as: #{$PROGRAM_NAME} #{ARGV.join(' ')}")
@@ -92,7 +93,7 @@ module MusicExtras
     def output
       begin
         hostname, port = @config['gui_host'].split(':')
-        port ||= Config::DEFAULT_GUI_PORT
+        port ||= ::Config::DEFAULT_GUI_PORT
 
 	begin
 	  @output = TCPSocket.new(hostname, port) if @options.gui
@@ -565,8 +566,17 @@ module MusicExtras
       data = '' unless data
 
       element = REXML::Element.new(key.downcase)
-      element.text = binary ? Base64::encode64(data) : data
-      element.attributes['encoded'] = 'base64' if binary
+
+      if binary
+	element.attributes['encoded'] = 'base64' if binary
+	element.text = Base64::encode64(data)
+      else
+	if data.include?("\n")
+	  element.text = REXML::CData::new(data)
+	else
+	  element.text = data
+	end
+      end
 
       @output.puts "\t" + element.to_s
     end

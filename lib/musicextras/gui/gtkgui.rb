@@ -126,28 +126,6 @@ module MusicExtras
       ret
     end
 
-    def set_artist_image2(image)
-      if image.nil?
-        @artist_image.set(Gdk::Pixbuf.new(@no_image_available))
-      else
-	file = write_image_to_file(image, 'musicextras_artist.img')
-	begin
-	  pixbuf = Gdk::Pixbuf.new(file)
-          if pixbuf.height > pixbuf.width
-            scale_h = @image_size
-            scale_w = ( ( pixbuf.width.to_f / pixbuf.height.to_f ) * @image_size).round
-          else
-            scale_h = ( ( pixbuf.height.to_f / pixbuf.width.to_f ) * @image_size).round
-            scale_w = @image_size
-          end
-	  pixbuf = pixbuf.scale(scale_w, scale_h)
-	  @artist_image.set(pixbuf)
-	rescue RuntimeError
-	  set_artist_image(nil)
-	end
-      end
-    end
-
     def set_status(msg)
       @statusbar.pop(1)
       @statusbar.push(1, msg)

@@ -22,7 +22,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-require 'musicextras/config'
+require 'musicextras/mconfig'
 require 'musicextras/debuggable'
 require 'musicextras/utils'
 require 'fileutils'
@@ -42,7 +42,7 @@ module MusicExtras
 
     # [+dir+] the directory to store cache data
     def initialize(dir=nil)
-      @config = Config.instance
+      @config = MConfig.instance
       @dir = dir || File.join(@config['basedir'], 'cache')
       @greylist_file = File.join(@dir, 'greylist.lst')
       @greylist_lock = File.join(@dir, '.greylist.lock')

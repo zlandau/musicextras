@@ -1,4 +1,4 @@
-#!/usr/bin/ruby18 -w
+#!/usr/bin/ruby1.8 -w
 #
 # musicextras-gui - Starts the Musicextras GUI set in guicontrol.rb
 #

@@ -6,7 +6,7 @@
 # All rights reserved.
 #
 
-require 'musicextras/config'
+require 'musicextras/mconfig'
 require 'fileutils'
 require 'thread'
 
@@ -17,7 +17,7 @@ module MusicExtras
     DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
     def debug(level, msg, caller_depth=1)
-      @config = Config.instance unless @config
+      @config = MConfig.instance unless @config
       $debug_mutex = Mutex.new unless defined? $debug_mutex
 
       meth = caller(caller_depth)[0].match(/\`(.*?)\'/)[1]
