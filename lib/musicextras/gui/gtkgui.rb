@@ -336,7 +336,6 @@ module MusicExtras
       buffer = @lyrics_text.buffer
       iter = buffer.get_iter_at_mark(buffer.get_mark('insert'))
 
-      found = iter.forward_search(txt, 0, nil)
       if !found and wrap
 	buffer.place_cursor(buffer.start_iter)
 	found = iter.forward_search(txt, 0, nil)
