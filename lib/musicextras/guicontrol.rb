@@ -120,6 +120,7 @@ module MusicExtras
 
               check_clients()
               doc = REXML::Document.parse_stream(session, self)
+	      @gui.done_parsing
 
               set_status('')
               @clients.delete(session)
@@ -190,6 +191,10 @@ module MusicExtras
 	@gui.set_years_active(data)
       when 'album_review'
         @gui.set_review(data)
+      when 'album_year'
+	@gui.set_album_year(data)
+      when 'album_tracks'
+	@gui.set_tracks(data)
       else
       end
 

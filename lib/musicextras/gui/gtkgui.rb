@@ -70,11 +70,18 @@ module MusicExtras
       str = "#{artist}: " + str if artist
       str = str + " (#{album})" if album
 
+      @glade.get_widget('album_frame').label = @album if album
+      @glade.get_widget('artist_frame').label = @artist if artist
+
       @main_window.set_title(str)
     end
 
     def set_lyrics(lyrics)
       @lyrics_text.buffer.set_text(lyrics)
+    end
+
+    def set_tracks(tracks)
+      @tracks = tracks
     end
 
     def set_biography(bio)
@@ -90,6 +97,10 @@ module MusicExtras
 
     def set_album_cover(cover)
       @album_image.pixbuf = process_image(cover)
+    end
+
+    def set_album_year(year)
+      @glade.get_widget('album_frame').label += " (#{year})" 
     end
 
     def set_artist_image(image)
@@ -128,6 +139,12 @@ module MusicExtras
     def set_status(msg)
       @statusbar.pop(1)
       @statusbar.push(1, msg)
+    end
+
+    def done_parsing
+      if @title == '' && defined? @tracks
+	@lyrics_text.buffer.set_text(@tracks)
+      end
     end
 
     private
