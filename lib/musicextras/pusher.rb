@@ -409,7 +409,10 @@ module MusicExtras
 	  unless lyrics
 	    regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
 	      lyrics = Song.new(@options.title, a).lyrics
-	      @options.lyrics_artist = a if lyrics
+	      if lyrics
+		@options.lyrics_artist = a
+		break
+	      end
 	    end
 	  end
 	rescue DataAccessor::AccessorNotImplemented
@@ -435,6 +438,7 @@ module MusicExtras
 	  unless image
 	    regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
 	      image = Artist.new(a).image
+	      break if image
 	    end
 	  end
 
@@ -463,6 +467,7 @@ module MusicExtras
 	  unless cover
 	    regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
 	      cover = Album.new(@options.album, a).cover
+	      break if cover
 	    end
 	  end
 
@@ -491,6 +496,7 @@ module MusicExtras
 	  unless tracks
 	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
 	      tracks = Album.new(@options.album, a).tracks
+	      break if tracks
 	    end
 	  end
 
@@ -520,6 +526,7 @@ module MusicExtras
 	  unless year
 	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
 	      year = Album.new(@options.album, a).year
+	      break if year
 	    end
 	  end
 
@@ -548,6 +555,7 @@ module MusicExtras
 	  unless bio
 	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
 	      bio = Artist.new(a).biography
+	      break if bio
 	    end
 	  end
 	rescue DataAccessor::AccessorNotImplemented
@@ -575,6 +583,7 @@ module MusicExtras
 	  unless review
 	    regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
 	      review = Album.new(@options.album, a).review
+	      break if review
 	    end
 	  end
 
@@ -603,6 +612,7 @@ module MusicExtras
 	  unless years
 	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
 	      years = Artist.new(a).years_active
+	      break if years
 	    end
 	  end
 
