@@ -41,6 +41,7 @@ module MusicExtras
     DESCRIPTION = 'Artist images, album covers, years active, biography and album reviews for many genres'
 
     ACCESS_VIOLATION_MSG = "Through traffic and monitoring of our websites" # see check_for_violation
+    COMMON_REGEX = '<a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">([^<]*)<\/a>'
 
     def initialize
       super(NAME, URL)
@@ -156,7 +157,6 @@ module MusicExtras
 	return nil
       end
 
-      #ma = review_page.match(/class=\"title\">Review<\/td><td align="right" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<!--End Center Content/mi)
       ma = review_page.match(/class=\"title\">Review<\/td><td align="right" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<\/p><\/td><\/tr><\/table>/mi)
 
       if ma
@@ -199,8 +199,8 @@ module MusicExtras
       body = fetch_page("/cg/amg.dll", post, MusicSite::USERAGENTS['Mozilla'])
 
       if body =~ /.*Name Search Results for.*/
-	body.scan(/<a href="\/cg\/amg.dll\?p=amg&sql=(11:[^"]*)">([^<]*)<\/a>/mi) do |url, name|
-          debug_var { :url }
+	body.scan(/#{COMMON_REGEX}/mi) do |url, name|
+	  debug_var { :url }
 	  if match?(@artist.name, name)
 	    return fetch_page("/cg/amg.dll?P=amg&sql=#{url}", nil, MusicSite::USERAGENTS['Mozilla'])
 	  else
@@ -253,7 +253,7 @@ module MusicExtras
       album_pages.each do |url|
 	page = fetch_page(url, nil, MusicSite::USERAGENTS['Mozilla'])
 	if page
-	  page.scan(/<a href="\/cg\/amg.dll\?p=amg&sql=(10:[^"]*)">([^<]*)<\/a>/mi) do |url, name|
+	  page.scan(/#{COMMON_REGEX}/mi) do |url, name|
 	    debug(5, "#{name} => #{url}")
 	    albums<< [name, url]
 	  end
@@ -302,9 +302,9 @@ module MusicExtras
       end
       check_for_violation(page)
 
-      tracks = ""
+      tracks = "\n"
       found = false
-      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">([^<]*)<\/a>/mi) do |num, name|
+      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="\/cg\/amg.dll\?p=amg&sql=[^"]*">([^<]*)<\/a>/mi) do |num, name|
 	found = true
 	tracks += sprintf("%3i. %s\n", num, name)
       end
