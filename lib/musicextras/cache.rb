@@ -165,8 +165,7 @@ module MusicExtras
 	end
 
         begin
-          File.open(@greylist_lock, 'w')
-          block.call
+          File.open(@greylist_lock, 'w') { block.call }
           File.delete(@greylist_lock)
         rescue Errno::ENOENT
           # ignore
