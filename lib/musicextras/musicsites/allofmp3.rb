@@ -153,7 +153,7 @@ module MusicExtras
 	return nil
       end
       albums.each do |album|
-	return album[1] if match?(@album.title, album[0], true)
+	return album[1].sub("songs3", "songs") if match?(@album.title, album[0], true)
       end
 
       debug(1, "album url for #{@album.title} by #{@artist.name} not found")
