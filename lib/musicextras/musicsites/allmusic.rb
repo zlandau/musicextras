@@ -96,7 +96,12 @@ module MusicExtras
       album_cover_url = get_album_cover_url
       debug_var { :album_cover_url }
       return nil unless album_cover_url
-      return fetch_page("http://image.allmusic.com/#{album_cover_url}", nil, MusicSite::USERAGENTS['Mozilla'])
+      page = fetch_page("http://image.allmusic.com/#{album_cover_url}", nil, MusicSite::USERAGENTS['Mozilla'])
+      unless page
+	debug(1, "Could not fetch cover for #{@album.title} by #{@album.artist.name}")
+	return nil
+      end
+      page
     end
 
     # Fetches artist biography info, returning nil if none is found

@@ -96,6 +96,11 @@ module MusicExtras
       debug_var { :post }
       body = fetch_page("http://search.allofmp3.com/search.shtml", post)
 
+      unless body
+	debug(1, "could not fetch page for @{artist.name}")
+	return nil
+      end
+
       if body !~ /.*the search engine found 0 documents.*/
 	body.scan(/<a href="([^"]*)">([^<]*)<\/a><\/td>/mi) do |url, name|  
           debug_var { :url }

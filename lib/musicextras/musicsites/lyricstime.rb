@@ -113,6 +113,10 @@ module MusicExtras
       return nil if !artist_url
       debug_var { :artist_url }
       page = fetch_page(artist_url)
+      unless page
+	debug(1, "could not fetch page for #{song.artist.name}")
+	return nil
+      end
       page.scan(/<a href="\/artist\/([\w\s\-\|\(\)\:\+\?]+?)\/" title="(.*?) lyrics">(.*?)<\/a>/i) do |url, name|
 	return "/artist/#{url}/" if match?(artist, name)
       end
