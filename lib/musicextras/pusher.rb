@@ -88,6 +88,7 @@ module MusicExtras
       @output = STDOUT
 
       if @options.run_tests == true
+	exit_code = 0
 	puts "Test results:"
 	@options.plugins.each do |plugin|
 	  passed, msg = MusicExtras.const_get(plugin).new.test()
@@ -95,13 +96,14 @@ module MusicExtras
 	    info = "passed"
 	  elsif passed == false
 	    info = "failed: #{msg.join(', ')}"
+	    exit_code = 10
 	  elsif passed == nil
 	    info = "not implemented"
 	  end
 
 	  puts "\t* %-20s [%s]" % [plugin, info]
 	end
-	exit 0
+	exit exit_code
       end
 
       if @options.quit_after_parse == true
