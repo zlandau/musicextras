@@ -35,21 +35,6 @@ require 'fileutils'
 
 autoload :GtkGui, 'musicextras/gui/gtkgui'
 
-# :stopdoc #
-module REXML
-  class IOSource
-    alias_method :_initialize, :initialize
-
-    def initialize(arg, blocksize=500)
-      @er_source = @source = arg
-      @line_break = '>'
-      super @source.readline(@line_break)
-      @line_break = encode('>')
-    end
-  end
-end
-# :startdoc:
-
 module MusicExtras
 
   ### Provides interface to guis
