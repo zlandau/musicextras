@@ -27,6 +27,7 @@ require 'musicextras/utils'
 require 'musicextras/pusher'
 require 'libglade2'
 require 'tmpdir'
+require 'mp3info'
 
 module MusicExtras
 
@@ -176,6 +177,13 @@ module MusicExtras
       @search_end_iter = buffer.start_iter
     end
 
+    def error(msg)
+      mdialog = Gtk::MessageDialog.new(nil, Gtk::Dialog::MODAL,
+	Gtk::MessageDialog::Type::ERROR, Gtk::MessageDialog::ButtonsType::OK, msg)
+      ret = mdialog.run
+      mdialog.hide
+    end
+
     ### When close button is clicked...
     def on_close_button_clicked
       @control.close_clicked
@@ -208,9 +216,32 @@ module MusicExtras
       @change_song_dialog.show
     end
 
-
     def on_change_song_cancel_clicked
       @change_song_dialog.hide
+    end
+
+    def on_change_song_open_clicked
+      dialog = @glade.get_widget('filechooserdialog')
+    
+      begin
+	ret = dialog.run
+
+	if ret == Gtk::Dialog::RESPONSE_OK
+	  Mp3Info.open(dialog.filename) do |m|
+	    @artist_label.text = m.tag['artist']
+	    @title_label.text = m.tag['title']
+	    @album_label.text = m.tag['album']
+	  end
+	elsif ret == Gtk::Dialog::RESPONSE_CANCEL
+	end
+      rescue Mp3InfoError
+	error("Error reading mp3 tag")
+	retry
+      rescue => e
+	error(e.message)
+      end
+
+      dialog.hide
     end
 
     def on_change_song_ok_clicked
@@ -223,6 +254,8 @@ module MusicExtras
       opts << "-a" << artist unless artist == ''
       opts << "-t" << title unless title == ''
       opts << "-l" << album unless album == ''
+
+      return if opts.length == 0
 
       Thread.new do
         system("musicextras", *opts)
