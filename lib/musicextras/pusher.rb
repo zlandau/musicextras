@@ -361,15 +361,15 @@ module MusicExtras
       end
 
       if @song
+	@options.lyrics_artist = @options.artist
 	begin
 	  lyrics = @song.lyrics
-          @options.lyrics_artist = @options.artist
 
 	  # If lyrics aren't found, start applying regex to the artist
 	  unless lyrics
 	    regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
 	      lyrics = Song.new(@options.title, a).lyrics
-              @options.lyrics_artist = a if lyrics
+	      @options.lyrics_artist = a if lyrics
 	    end
 	  end
 	rescue DataAccessor::AccessorNotImplemented
@@ -435,6 +435,36 @@ module MusicExtras
       end
 
       output_tag('ALBUM_COVER', cover, true)
+    end
+
+    ### Sends ALBUM_TRACKS => Text tag to queue if tracks are found,
+    ### nil otherwise
+    def handle_album_tracks
+      output_tag('ALBUM_TRACKS', _('Retrieving album tracks..')) if @options.gui
+
+      if @options.album && @options.artist
+	album = Album.new(@options.album, @options.artist)
+
+	begin
+	  tracks = album.tracks
+
+	  unless tracks
+	    regexp_list(@options.artist, @config['artist_cond_regex']) do |a|
+	      tracks = Album.new(@options.album, a).tracks
+	    end
+	  end
+
+	rescue DataAccessor::AccessorNotImplemented
+	  tracks = nil
+	end
+
+	tracks = _('No tracks found.') if tracks.nil?
+      else
+	info _('Notice: not retrieving album tracks (missing album or artist)')
+	tracks = nil
+      end
+
+      output_tag('ALBUM_TRACKS', tracks, false)
     end
 
     ### Sends BIOGRAPHY => Bio_Data if found
