@@ -87,6 +87,10 @@ module MusicExtras
       end
 
       @output = STDOUT
+
+      if @options.quit_after_parse == true
+	exit 0
+      end
     end
 
     ### Retrieves and outputs the data
@@ -102,9 +106,15 @@ module MusicExtras
 	  exit 1
 	end
 
-	xml_header()
-	retrieve_data()
-	xml_footer()
+	begin
+	  xml_header()
+	  retrieve_data()
+	  xml_footer()
+	rescue => e
+	  STDERR.puts "Connection error on all attempts: #{e.message}"
+	  exit 6
+	end
+
       rescue Errno::EPIPE
 	# Another client probably connected, so just silently quit
       end
@@ -137,6 +147,7 @@ module MusicExtras
       @options.verbose = @config['verbose'] || false
       @options.fetchers = @config['fetchers'] || @valid_fetchers
       @options.plugins = @config['plugins'] || MusicSite::plugins
+      @options.quit_after_parse = false
 
       @song = nil
 
@@ -229,19 +240,23 @@ module MusicExtras
           @config['use_cache'] = o
         end
         opts.on("-C", "--clear-greylist", _("clears the greylist and exits")) do
+	  puts "Clearing greylist..."
           cache = Cache.new
           cache.clear_greylist
+	  @options.quit_after_parse = true
         end
         opts.on("", "--clear-cache", _("removes all data in cache directory")) do
+	  puts "Clearing cache..."
           cache = Cache.new
           cache.clear_cachedir
+	  @options.quit_after_parse = true
         end
         opts.on("", "--clear-webcache", _("clears cached web data")) do
+	  puts "Clearing webcache..."
           cache = Cache.new
           cache.clear_webcache
-          exit 0
+	  @options.quit_after_parse = true
         end
-
 
         opts.on("-d", "--debug-level=[LEVEL]", Integer, _("sets debug level (defaults to 3)")) do |o|
           @config['debug_level'] = o || 3

@@ -243,6 +243,10 @@ module MusicExtras
 	  end
           $VERBOSE = verbose
 	end
+      rescue SocketError => error
+	if error.message =~ /^getaddrinfo/
+	  raise
+	end
       rescue => error
 	debug(1, "error retrieving #{uri}: #{error}")
       end

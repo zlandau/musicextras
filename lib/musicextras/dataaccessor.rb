@@ -169,22 +169,32 @@ module MusicExtras
       threads = []
 
       Thread.abort_on_exception = true if @config and @config['debug_level'] > 1
-
+      
       accessors.each do |a|
+	
 	threads << Thread.new(a) do |a|
-	  tmp_data = a.run(self)
-	  mutex.synchronize do 
-	    if ( (data == NO_DATA) && (tmp_data) )
-	      data = tmp_data
+	  begin
+	    Thread.current[:connection_error] = nil
+	    tmp_data = a.run(self)
+	    mutex.synchronize do 
+	      if ( (data == NO_DATA) && (tmp_data) )
+		data = tmp_data
+	      end
 	    end
+	  rescue SocketError => e
+	    Thread.current[:connection_error] = e
 	  end
 	end
+
       end
 
       # XXX: How can I do this without polling?
       loop do
 	alive = false
+
 	sleep(0.1)
+
+	error = false
 	threads.each do |thread|
 	  alive = true if thread.alive?
 	end
@@ -193,6 +203,12 @@ module MusicExtras
 	  return data
 	end
 	unless alive
+	  # See if they all got connection errors
+	  error = true
+	  threads.each { |t| error = false if t[:connection_error] == nil }
+	  if error
+	    raise threads[0][:connection_error]
+	  end
 	  debug(1, "Retrieve_data unsuccessful")
 	  return nil
 	end
