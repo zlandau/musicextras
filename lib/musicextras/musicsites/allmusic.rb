@@ -50,6 +50,7 @@ module MusicExtras
       Artist::register_plugin(self, :years_active, CACHE_PATH['years_active'])
       Album::register_plugin(self, :cover, CACHE_PATH['album_cover'])
       Album::register_plugin(self, :review, CACHE_PATH['album_review'])
+      Album::register_plugin(self, :tracks, CACHE_PATH['album_tracks'])
     end
 
     # Fetches artist image from site, returning the image as a binary string
@@ -155,7 +156,8 @@ module MusicExtras
 	return nil
       end
 
-      ma = review_page.match(/class=\"title\">Review<\/td><td align="right" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<!--End Center Content/mi)
+      #ma = review_page.match(/class=\"title\">Review<\/td><td align="right" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<!--End Center Content/mi)
+      ma = review_page.match(/class=\"title\">Review<\/td><td align="right" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<\/p><\/td><\/tr><\/table>/mi)
 
       if ma
         extract_text(ma[2], /(.*)/mi) + "\nSource: #{ma[1]} from #{self.to_s}\n"
@@ -284,6 +286,37 @@ module MusicExtras
       debug(1, "album url for #{@album.title} by #{@artist.name} not found")
       return nil
     end
+
+    # Fetches the track listing for a page
+    def tracks(new_album)
+      @album = new_album
+      @artist = new_album.artist
+
+      album_url = get_album_url()
+      debug_var { :album_url }
+      return nil if !album_url
+      page = fetch_page(album_url, nil, MusicSite::USERAGENTS['Mozilla'])
+      if !page
+	debug(1, "could not fetch tracks page for #{@artist.name}")
+	return nil
+      end
+      check_for_violation(page)
+
+      tracks = ""
+      found = false
+      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="javascript:j\('[^']*'\)">([^<]*)<\/a>/m) do |num, name|
+	found = true
+	tracks += sprintf("%3i. %s\n", num, name)
+      end
+
+      if found
+	return tracks
+      else
+	debug(1, "No tracks found for #{@album.title} by #{@artist.name}")
+	return nil
+      end
+    end
+      
 
     # Fetches the album cover url. Calls get_album_url
     def get_album_cover_url # :nodoc:
