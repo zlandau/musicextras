@@ -108,9 +108,9 @@ class TC_AllMusic < Test::Unit::TestCase
   def test_get_artist_bio
     @site.artist.name = 'Bad Religion'
     assert_match(/.*Out of all.*of Belief.*/m, @site.biography(@site.artist))
-    # XXX: no workie
-    #@site.artist.name = '59 Times The Pain'
-    #assert_match(/.*Named in honor.*/, @site.biography(@site.artist))
+    
+    @site.artist.name = '59 Times The Pain'
+    assert_match(/.*Named in honor.*/, @site.biography(@site.artist))
 
     @site.artist.name = 'They Might Be Giants'
     assert_match(/.*Combining.*, No!.*/m, @site.biography(@site.artist))
@@ -151,6 +151,20 @@ class TC_AllMusic < Test::Unit::TestCase
 
     @site.artist.name = "Bad Religion"
     assert_equal("80s 90s 2000s", @site.years_active(@site.artist))
+  end
+
+  def test_tracks
+    @site.album.artist.name = 'They Might Be Giants'
+    @site.album.title = 'They Might Be Giants'
+    tracks = @site.tracks(@site.album)
+    assert_match(/1\. Everything Right Is Wrong Again/m, tracks)
+    assert_match(/19\. Rhythm Section Want Ad/m, tracks)
+
+    @site.album.artist.name = 'Pennywise'
+    @site.album.title = 'Straight Ahead'
+    tracks = @site.tracks(@site.album)
+    assert_match(/1\. Greed/m, tracks)
+    assert_match(/17\. Badge of Pride/m, tracks)
   end
 
 end
