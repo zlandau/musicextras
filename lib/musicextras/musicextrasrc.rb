@@ -20,6 +20,10 @@
 ## Timeout for http retrieves.  Increase this if you are prone to timeouts
 @config['timeout'] = 90
 
+## Time greylist entries remain valid.  Set to nil if you don't want greylist
+## entries to timeout.  Times are in seconds.  DAY, WEEK, and MONTH can be used.
+@config['greylist_timeout'] = MusicExtras::MONTH
+
 ## What information should be fetched? Use musicextras --list-fetchers for a list
 ## Defaults to all available fetchers
 #@config['fetchers'] = %w(lyrics artist_image album_cover biography years_active album_review album_tracks album_year)

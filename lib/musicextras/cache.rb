@@ -105,7 +105,7 @@ module MusicExtras
     def add_to_greylist(key)
       file = get_filename(key, false)
       debug_var { :file }
-      @@greylist << file
+      @@greylist[file] = Time.now
 
       save_greylist
     end
@@ -121,14 +121,20 @@ module MusicExtras
 
     # Checks to see if a key is in the greylist
     def greylisted?(key)
-      return @@greylist.include?(get_filename(key, false))
+      entry = @@greylist[get_filename(key, false)]
+
+      if !@config['greylist_timeout']
+	return entry
+      else
+	return entry && entry+@config['greylist_timeout'] > Time.now
+      end
     end
 
     # Writes greylist to file
     def save_greylist
       greylist_lock do 
 	File.open(@greylist_file, 'w') do |f|
-	  YAML.dump(@@greylist.sort, f)
+	  YAML.dump(@@greylist, f)
 	end
       end
     end
@@ -140,14 +146,21 @@ module MusicExtras
 	greylist_lock do
 	  File.open(@greylist_file, 'r') do |f|
 	    begin
-	      @@greylist = YAML.load(f) || Array.new
+	      @@greylist = YAML.load(f) || Hash.new
 	    rescue ArgumentError
-	      @@greylist = Array.new
+	      @@greylist = Hash.new
 	    end
 	  end
 	end
       else
-	@@greylist = Array.new
+	@@greylist = Hash.new
+      end
+
+      # If the old greylist format was loaded, convert to the new format
+      if @@greylist.class == Array
+	old_greylist = @@greylist
+	@@greylist = {}
+	old_greylist.each { |x| @@greylist[x] = Time.now }
       end
     end
 
