@@ -110,9 +110,12 @@ module MusicExtras
 	  xml_header()
 	  retrieve_data()
 	  xml_footer()
-	rescue => e
+
+	rescue SocketError => e
 	  STDERR.puts "Connection error on all attempts: #{e.message}"
 	  exit 6
+	ensure
+	  @output.close if @options.gui
 	end
 
       rescue Errno::EPIPE
