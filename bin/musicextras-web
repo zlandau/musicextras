@@ -1,0 +1,199 @@
+#!/usr/bin/ruby
+#
+# musicextras-web - Web frontend for musicextras
+#
+# version: $Id$
+#
+# Copyright (C) 2004 Zachary P. Landau <kapheine@hypa.net>
+# All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+require 'musicextras/song'
+require 'musicextras/musicsites/_load_sites'
+
+require 'cgi'
+require 'html/template'
+require 'webrick'
+include MusicExtras
+include WEBrick
+
+s = HTTPServer.new( :Port => 2000 )
+
+MusicSite::activate_plugins
+
+class ImageServlet < HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+    artist = req.query['artist']
+    album = req.query['album']
+
+    if artist && album
+      res.body = Album.new(album, artist).cover
+    elsif artist
+      res.body = Artist.new(artist).image
+    end
+
+    res['Content-Type'] = "image/jpeg"
+  end
+end
+
+class BioServlet < HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+    artist = req.query['artist']
+
+    tmpl = HTML::Template.new(File.join(DATA_DIR, "html", "info.html"))
+
+    if artist
+      text = Artist.new(artist).biography || 'No biography found'
+
+      tmpl.param({'type'  => "Biography",
+                  'title' => artist,
+		  'text'  => text.gsub("\n", "<br/>")})
+    end
+
+    res.body = tmpl.output
+    res['Content-Type'] = "text/html"
+  end
+end
+
+class ReviewServlet < HTTPServlet::AbstractServlet
+  def do_GET(req, res)
+    artist = req.query['artist']
+    album = req.query['album']
+
+    tmpl = HTML::Template.new(File.join(DATA_DIR, "html", "info.html"))
+
+    if artist && album
+      text = Album.new(album, artist).review || 'No review found.'
+
+      tmpl.param({'type'  => "Review",
+                  'title' => "#{album} by #{artist}",
+		  'text'  => text.gsub("\n", "<br/>")})
+    end
+
+    res.body = tmpl.output
+    res['Content-Type'] = "text/html"
+  end
+end
+
+class MusicextrasServlet < HTTPServlet::AbstractServlet
+  LINES_PER_PANE = 27
+  CHARS_PER_LINE = 100
+
+  def do_GET(req, res)
+    res.body = render_page(req)
+    res['Content-Type'] = "text/html"
+  end
+
+  def render_page(req)
+    artist = req.query['artist']
+    album = req.query['album']
+    title = req.query['title']
+
+    artist = nil if artist == ""
+    album = nil if album == ""
+    title = nil if title == ""
+
+    tmpl = HTML::Template.new(File.join(DATA_DIR, "html", "index.html"))
+
+    artist_image = nil
+    if artist
+      artist_image = Artist.new(artist).image
+    end
+
+    album_cover = nil
+    year = nil
+    if artist && album
+      album_cover = Album.new(album, artist).cover
+      year = Album.new(album, artist).year
+    end
+
+    if artist_image
+      tmpl.param({'artist_image' => "/img?artist=#{CGI::escape(artist)}"})
+    end
+
+    if album_cover
+      tmpl.param({'album_image' => "/img?artist=#{CGI::escape(artist)}&album=#{CGI::escape(album)}"})
+    end
+
+    if title && artist
+      lyrics = Song.new(title, artist).lyrics
+    else
+      lyrics = nil
+    end
+
+    lyrics1 = "No lyrics found."
+    lyrics2 = ""
+    if lyrics
+      lines = lyrics.split("\n")
+
+      if lines.size < LINES_PER_PANE
+	lyrics1 = lines.join("<br/>")
+	lyrics2 = ""
+      else
+	lyrics1 = lines[0..lines.size/2].join("<br/>")
+	lyrics2 = lines[(lines.size/2)+1..-1].join("<br/>")
+      end
+    end
+
+    artist_title = artist
+    album_title = year ? "#{album} (#{year})" : album
+    song_title = title
+
+    tmpl.param({'lyrics1' => lyrics1, 'lyrics2' => lyrics2})
+    tmpl.param({'title'  => title,
+                'artist' => artist,
+		'album' => album,
+	        'artist_title' => artist_title,
+	        'album_title' => album_title,
+	        'song_title' => song_title})
+
+    bio = nil
+    bio = Artist.new(artist).biography if artist
+    tmpl.param({'bio_disabled' => 'disabled'}) unless bio
+
+    review = nil
+    review = Album.new(album, artist).review if artist && album
+    tmpl.param({'review_disabled' => 'disabled'}) unless review
+
+    if artist
+      artist_encoded = CGI::escape(artist)
+    else
+      artist_encoded = ''
+    end
+    tmpl.param({'artist_encoded' => artist_encoded})
+
+    if album
+      album_encoded = CGI::escape(album)
+    else
+      album_encoded = ''
+    end
+    tmpl.param({'album_encoded' => album_encoded})
+    #print body
+    
+    tmpl.output
+  end
+end
+
+s.mount("/", MusicextrasServlet)
+s.mount("/css", HTTPServlet::FileHandler, File.join(DATA_DIR, "html", "css"))
+s.mount("/images", HTTPServlet::FileHandler, File.join(DATA_DIR, "html", "images"))
+s.mount("/img", ImageServlet)
+s.mount("/bio", BioServlet)
+s.mount("/review", ReviewServlet)
+
+trap("INT") { s.shutdown }
+s.start

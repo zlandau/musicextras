@@ -7,6 +7,7 @@ Changes in 0.6.5
     - Added 'Fill from File' to Song Change dialog
     - Added greylist entry timeouts
     - Added integrated plugin testing (-T)
+    - Added Web interface using WEBrick
 
 Changes in 0.6.4
     - AllMusic plug fixed after allmusic.com site redesign

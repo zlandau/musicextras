@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Musicextras</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="css/default.css" rel="stylesheet" type="text/css" title="default.css" />
+
+</head>
+<body>
+
+<div id="infobox">
+<div id="form" style="position:absolute; top:22px; left:5px;">
+		<form action="" method="get">
+			<label for="art" style="padding-right:30px;">Artist</label>
+			<input type="text" name="artist" id="art" value="<!var:artist>" tabindex=1/>
+			<input type="button" name="bio" value="Biography" <!var:bio_disabled> class="submit" onclick="javascript:window.open('bio?artist=<!var:artist_encoded>')" tabindex=4 />
+			<label for="alb" style="padding-right:30px;">Album</label><input type="text" name="album" id="alb" value="<!var:album>" tabindex=2 />
+			<input type="button" name="review" value="Review" <!var:review_disabled> class="submit" onclick="javascript:window.open('review?artist=<!var:artist_encoded>&album=<!var:album_encoded>')" tabindex=5 />
+			<label for="son" style="padding-right:30px;">Song Title</label><input type="text" name="title" id="son" value="<!var:title>" tabindex=3 />
+			<input type="submit" name="Submit" value="Submit" class="submit" tabindex=6 />
+		</form>
+</div>
+</div>
+<div id="infobox-title" align="center">Controls</div>
+<div id="artist" align="center"></div>
+<div id="artist-title" align="center"><!var:artist_title></div>
+<div id="artist-pic" align="center"><img src="<!var:artist_image>" height="190px"/></div>
+<div id="album" align="center"></div>
+<div id="album-title" align="center"><!var:album_title></div>
+<div id="album-pic" align="center"><img src="<!var:album_image>" height="190px"/></div>
+<div id="right"></div>
+<div id="title"></div>
+<div id="song-header" align="center"><!var:song_title></div>
+<div id="lyrics-left"><p><!var:lyrics1></p></div>
+<div id="lyrics-right"><p><!var:lyrics2></p></div>
+ 
+
+</body>
+</html>
+
+

@@ -142,9 +142,9 @@ module MusicExtras
     end
 
     def done_parsing
-      if @title == '' && defined? @tracks
-	@lyrics_text.buffer.set_text(@tracks)
-      end
+      #if @title == '' && defined? @tracks
+      #	@lyrics_text.buffer.set_text(@tracks)
+      #end
     end
 
     private

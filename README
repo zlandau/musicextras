@@ -14,9 +14,17 @@ should be, etc, there.
 = Dependencies
 
  Ruby 1.8.1 - http://www.ruby-lang.org
- ruby-gnome2 - http://ruby-gnome2.sourceforge.jp
  mp3info - http://rubyforge.org/projects/ruby-mp3info/
  ruby-gettext (optional) - http://ponx.s5.xrea.com/hiki/ruby-gettext.html
+
+== For GTK Interface:
+
+ ruby-gnome2 - http://ruby-gnome2.sourceforge.jp
+ 
+== For web interface:
+
+ WEBrick - http://www.webrick.org
+ html-template 0.16 - http://shebang.jp/src/ruby/
 
 = Installation
 
@@ -134,7 +142,7 @@ That's it.
 
 = Writing a GUI
 
-At the moment, there is only a GTK Gui. It should be fairly easy to implement
+At the moment, there is a GTK and a Web Gui. It should be fairly easy to implement
 one with another toolkit, however. Just make your GUI a subclass of Gui (gui.rb)
 and use that as a template. The gtkgui.rb file will probably help too.
 

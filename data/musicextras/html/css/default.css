@@ -1,0 +1,197 @@
+body { background-color:#0056AB; }
+#infobox {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	width: 280px;
+	height: 160px;
+	background-color:white;
+	color:#000000;
+	font-family:Arial;
+	font-size:14px;
+	border-color:black;
+	border-style:solid;
+	border-width:1px;
+}
+
+#infobox-title {
+	position: absolute;
+	top: 21px;
+	left: 21px;
+	width: 279px;
+	height: 18px;
+	background-color:#AAAAAA;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding-top:1px;
+	padding-left:1px;
+}
+#form {
+	position:absolute;
+	top:25px;
+	left:5px;
+}
+label {
+	display:block;
+	float:left;
+	width:150px;
+}
+
+.submit {
+	display:block;
+	width:85px;
+	height:22px;
+}
+
+input {
+	display:block;
+	float:left;
+	width:180px;
+}
+#artist {
+	position: absolute;
+	top: 190px;
+	left: 20px;
+	width: 280px;
+	height: 210px;
+	background-color:white;
+	color:#000000;
+	font-family:Arial;
+	font-size:14px;
+	border-color:black;
+	border-style:solid;
+	border-width:1px;
+}
+#artist-title {
+	position: absolute;
+	top: 191px;
+	left: 21px;
+	width: 279px;
+	height: 18px;
+	background-color:#AAAAAA;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding-top:1px;
+	padding-left:1px;
+}
+
+#artist-pic {
+	position:absolute;
+	top:210px;
+	left:20px;
+	width:280px;
+	height:190px;
+	overflow:hidden;
+}
+
+#album {
+	position: absolute;
+	top: 410px;
+	left: 20px;
+	width: 280px;
+	height: 210px;
+	background-color:white;
+	color:#000000;
+	font-family:Arial;
+	font-size:14px;
+	border-color:black;
+	border-style:solid;
+	border-width:1px;
+}
+#album-title {
+	position: absolute;
+	top: 411px;
+	left: 21px;
+	width: 279px;
+	height: 18px;
+	background-color:#AAAAAA;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding-top:1px;
+	padding-left:1px;
+}
+
+#album-pic {
+	position:absolute;
+	top:430px;
+	left:20px;
+	width:280px;
+	height:190px;
+	overflow:hidden;
+}
+
+
+#right {
+	position: absolute;
+	top: 130px;
+	left: 320px;
+	width: 681px;
+	height: 490px;
+	background-color:#FFFFFF;
+	color:#000000;
+	font-family:Arial;
+	font-size:18px;
+	border-style:solid;
+	border-width:1px;
+
+}
+
+#title {
+	position: absolute;
+	top: 20px;
+	left: 320px;
+	width: 680px;
+	height: 100px;
+	background-color:#FFFFFF;
+	background-image:url(../images/musicextras.gif);
+	background-position:center;
+	background-repeat:no-repeat;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding-top:1px;
+	padding-left:1px;
+	border-style:solid;
+	border-width:1px;
+}
+#song-header {
+	text-align:center;
+	position: absolute;
+	top: 131px;
+	left: 321px;
+	width:680px;
+	height: 18px;
+	background-color:#AAAAAA;
+	color:#000000;
+	font-family:Arial;
+	font-size:12px;
+	padding-top:1px;
+	padding-left:1px;
+}
+
+#lyrics-left {
+	position: absolute;
+	top:165px;
+	left:346px;
+	width: 300px;
+	height: 445px;
+	color:#000000;
+	font-family:"Times New Roman", Times, serif;
+	font-size:12px;
+	overflow:auto;
+}
+
+#lyrics-right {
+	position: absolute;
+	top:165px;
+	left:681px;
+	width: 300px;
+	height: 445px;
+	color:#000000;
+	font-family:"Times New Roman", Times, serif;
+	font-size:12px;
+	overflow:auto;
+}
