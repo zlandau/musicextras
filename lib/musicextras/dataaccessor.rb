@@ -168,6 +168,8 @@ module MusicExtras
       data = NO_DATA
       threads = []
 
+      Thread.abort_on_exception = true if @config and @config['debug_level'] > 1
+
       accessors.each do |a|
 	threads << Thread.new(a) do |a|
 	  tmp_data = a.run(self)
@@ -186,8 +188,14 @@ module MusicExtras
 	threads.each do |thread|
 	  alive = true if thread.alive?
 	end
-	return data unless data == NO_DATA
-	return nil unless alive
+	unless data == NO_DATA
+	  debug(1, "Retrieve_data successful")
+	  return data
+	end
+	unless alive
+	  debug(1, "Retrieve_data unsuccessful")
+	  return nil
+	end
       end
     end
 
