@@ -1,6 +1,4 @@
 Core
-    - Add timeouts to greylist to auto-delete entries after X days? Ask
-      nonexistent userbase for their opinion
 GUI
     - Threading in musicextras would be nice. There were problems with it, so
       I took it out, but I would like to give it another shot.
