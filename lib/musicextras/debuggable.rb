@@ -49,5 +49,9 @@ module MusicExtras
       var = block.call
       debug(3, "#{var} = " + eval(var.to_s, block.binding).inspect, 2)
     end
+
+    def debug_dump(filename, data)
+      File.open(filename, "w") { |f| f.write(data) }
+    end
   end
 end
