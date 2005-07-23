@@ -52,8 +52,8 @@ module MusicExtras
     def lyrics(new_song)
       @song = new_song
 
-      unless @song.title and @song.artist
-	debug(1, "song title or artist not specified")
+      unless @song.title and @song.artist and @song.album
+	debug(1, "song title, artist or album not specified")
 	return nil
       end
 
@@ -61,6 +61,9 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url, nil, MusicSite::USERAGENTS['Mozilla'])
+      return nil if !page
+      debug_dump("get_song_url.dump", page)
+
       page.gsub!(/(<td.*?>)/, '\1<br/><br/>')
       text = extract_text(page, 
 			  /<\/b><\/font><\/td><\/tr>\n(.*?)\n<\/p><\/td><\/tr><\/table><\/td><\/tr>\n/m)
@@ -87,24 +90,45 @@ module MusicExtras
       return nil if !artist_url
       debug_var { :artist_url }
       page = fetch_page(artist_url)
-      page.scan(/<a href=\/group\/(\d+?)>(.*?)<\/a><br>/) do |url, name|
-	return "/group/#{url}" if match?(artist, name)
+      page.scan(/<a href=\/lyrics\/([^>]*)>(.*?)<\/a><\/td>/) do |url, name|
+
+	return "/lyrics/#{url}" if match?(artist, name)
       end
 
       debug(1, "could not find url for #{@song.artist.name}")
       return nil
     end
 
+    def get_album_url # :nodoc:
+      albums = []
+      album = @song.album.title
+      artist_url = get_artist_url()
+      return nil if !artist_url
+      page = fetch_page(artist_url)
+      return nil if !page
+      page.scan(/<td class=td1[ab]><a href=(\/lyrics\/[^\/]*\/[^>]*)>([^<]*).*?\/td>/) do |url, name|
+        return url if match?(album, name)
+      end
+
+      debug(1, "could not find url for #{@song.album.title} by #{@song.artist.name}")
+      return nil
+    end
+
     # Fetches the url for an artist's song of returns nil if song is not found
     # Calls get_artist_url
     def get_song_url # :nodoc:
-      artist_url = get_artist_url()
-      return nil if !artist_url
-      debug_var { :artist_url }
-      page = fetch_page(artist_url)
+      unless @song.album and @song.album.title and @song.album.artist.name
+        debug(1, "album title or artist name not specified")
+        return nil
+      end
+
+      album_url = get_album_url()
+      return nil if !album_url
+      debug_var { :album_url }
+      page = fetch_page(album_url)
       return nil if !page
-      page.scan(/<a href=\/song\/(\d+)>(.*?)<\/a>/) do |url, name|
-	return "/song/#{url}" if match?(@song.title, name, true)
+      page.scan(/<td class=td3[ab]><a href=(\/lyrics\/[^\/]*\/[^>]*)>([^<]*).*?\/td>/) do |url, name|
+	return "#{url}" if match?(@song.title, name, true)
       end
 
       debug(1, "could not get song url for #{@song.title} by #{@song.artist.name}")
@@ -116,7 +140,7 @@ module MusicExtras
       problems = []
 
       artist = Artist.new("Queen")
-      song = Song.new("Death on Two Legs", artist)
+      song = Song.with_album("Death on Two Legs", Album.new("A Night at the Opera", "Queen"))
 
       if !lyrics(song)
 	passed = false

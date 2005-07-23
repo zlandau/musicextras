@@ -61,7 +61,7 @@ module MusicExtras
 
       page = get_artist_page
       return nil unless page
-      page.scan(/<td align="left" valign="top"[^<]*<img src="([^"]*)" border=1><\/td>/i) do |image_url|
+      page.scan(/<td align="left" valign="top"[^<]*<img src="([^"]*)" border=1 [^>]*><\/td>/i) do |image_url|
 	debug_var { :image_url }
 	return fetch_page(image_url.to_s)
       end 
@@ -168,7 +168,7 @@ module MusicExtras
       page = fetch_page(album_url)
       return nil if !page
 
-      page.scan(/<td valign="top"[^<]*<img src="([^"]*)" border=1><\/td>/i) do |image_url|
+      page.scan(/<td valign="top"[^<]*<img src="([^"]*)" border=1 [^>]*><\/td>/i) do |image_url|
 	debug_var { :image_url }
 	return image_url.to_s
       end 

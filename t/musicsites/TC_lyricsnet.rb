@@ -14,6 +14,7 @@ class TC_LyricsNet < Test::Unit::TestCase
     @site = LyricsNet.new
 
     @site.song = Song.new('', '')
+    @site.song.album = Album.new('', '')
 
     Debuggable::setup()
   end
@@ -38,9 +39,9 @@ class TC_LyricsNet < Test::Unit::TestCase
 
   def test_get_artist_url
     @site.song.artist.name = 'Tom Petty'
-    assert_equal('/group/1049', @site.get_artist_url)
+    assert_equal('/lyrics/tom_petty.html', @site.get_artist_url)
     @site.song.artist.name = 'The Cure'
-    assert_equal('/group/2407', @site.get_artist_url)
+    assert_equal('/lyrics/the_cure.html', @site.get_artist_url)
     @site.song.artist.name = 'Does not exist'
     assert_equal(nil, @site.get_artist_url)
   end
@@ -48,27 +49,38 @@ class TC_LyricsNet < Test::Unit::TestCase
   def test_get_song_url
     @site.song.artist.name = 'Tom Petty'
     @site.song.title = 'Free Fallin\''
-    assert_equal('/song/30574', @site.get_song_url)
+    @site.song.album.title = "Full Moon Fever"
+    #assert_equal('/song/30574', @site.get_song_url)
+    assert_equal('/lyrics/tom_petty/full_moon_fever/free_fallin_.html', @site.get_song_url)
     @site.song.title = 'American Girl'
-    assert_equal('/song/30485', @site.get_song_url)
+    @site.song.album.title = 'Greatest Hits'
+    assert_equal('/lyrics/tom_petty/greatest_hits/american_girl.html', @site.get_song_url)
 
     @site.song.artist.name = '98 Mute'
+    @site.song.album.title = '98 Mute'
     @site.song.title = 'Wrong'
-    assert_equal('/song/92105', @site.get_song_url)
+    assert_equal('/lyrics/98_mute/98_mute/wrong.html', @site.get_song_url)
 
     @site.song.artist.name = 'IDontExist'
     @site.song.title = 'Whatever'
     assert_nil(@site.get_song_url)
   end
 
+  def test_get_album_url
+    @site.song.artist.name = "Tom Petty"
+    @site.song.album.title = "Full Moon Fever"
+    assert_match("/lyrics/tom_petty/full_moon_fever.html",
+      @site.get_album_url)
+  end
+
   def test_lyrics
-    lyrics = @site.lyrics(Song.new('Free Fallin\'', 'Tom Petty'))
+    lyrics = @site.lyrics(Song.with_album('Free Fallin\'', Album.new("Full Moon Fever", "Tom Petty")))
     assert_match(/.*She\'s a good girl, loves her mam a.*/, lyrics)
-    lyrics = @site.lyrics(Song.new('Doesnt Exist', 'Tom Petty'))
+    lyrics = @site.lyrics(Song.with_album('Doesnt Exist', Album.new("Full Moon Fever", 'Tom Petty')))
     assert_nil(lyrics)
-    lyrics = @site.lyrics(Song.new('Nope', 'Not Here'))
+    lyrics = @site.lyrics(Song.with_album('Nope', Album.new("Naw", "Not")))
     assert_nil(lyrics)
-    lyrics = @site.lyrics(Song.new('Wrong', '98 Mute'))
+    lyrics = @site.lyrics(Song.with_album('Wrong', Album.new("98 Mute", "98 Mute")))
     assert_match(/.*I know \'cause I was once.*/, lyrics)
   end
 end
