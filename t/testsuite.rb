@@ -9,7 +9,8 @@ require 'test/unit'
 require 'musicextras/mconfig'
 MusicExtras::MConfig.instance['basedir'] = "test_dir"
 
-Dir['TC_*.rb'].each do |test|
+dir = File.join(File.dirname(__FILE__), "TC_*.rb")
+Dir[dir].each do |test|
   require test
 end
 

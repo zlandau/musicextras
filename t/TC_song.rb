@@ -35,7 +35,7 @@ class TC_Song < Test::Unit::TestCase
   end
 
   def test_from_mp3_tag
-    datadir = Dir['**/data'].to_s
+    datadir = Dir["#{File.dirname(__FILE__)}/**/data"].to_s
 
     assert_raises(Errno::ENOENT) { Song.from_mp3_tag('doesnt exist') }
     assert_raises(Song::InvalidTagException) { Song.from_mp3_tag(File.join(datadir, "slide_notag.mp3")) }
