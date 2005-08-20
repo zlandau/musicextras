@@ -1,0 +1,97 @@
+# Translation file for the GTK musicextras-gui
+# Copyright (C) 2004 Zachary P. Landau
+# Copyright (C) 2004 Christian Neukirchen
+# This file is distributed under the same license as the musicexras package.
+# Zachary P. Landau <kapheine@hypa.net>, 2004.
+# Christian Neukirchen <chneukirchen@yahoo.de>,
+#   <http://purl.org/net/chneukirchen>, 2004.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-02 18:18-0500\n"
+"PO-Revision-Date: 2004-03-18 12:45-0500\n"
+"Last-Translator: Christian Neukirchen <chneukirchen@yahoo.de>\n"
+"Language-Team: Zachary P. Landau <kapheine@hypa.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# not worth translating to "Musikextras"
+#: lib/musicextras/gui/glade-msg.c:7
+msgid "Musicextras"
+msgstr "Musicextras"
+
+#: lib/musicextras/gui/glade-msg.c:8
+msgid "Main Window"
+msgstr "Hauptfenster"
+
+#: lib/musicextras/gui/glade-msg.c:9
+msgid "<b>Album Cover</b>"
+msgstr "<b>CD-Hülle</b>"
+
+#: lib/musicextras/gui/glade-msg.c:10
+msgid "<b>Artist Image</b>"
+msgstr "<b>Bild des Künstlers</b>"
+
+#: lib/musicextras/gui/glade-msg.c:11
+msgid "Show more information"
+msgstr "Mehr Information zeigen"
+
+#: lib/musicextras/gui/glade-msg.c:12
+msgid "_More Information"
+msgstr "_Mehr Information"
+
+#: lib/musicextras/gui/glade-msg.c:13
+msgid "Edit the lyrics"
+msgstr "Liedtext bearbeiten"
+
+#: lib/musicextras/gui/glade-msg.c:14
+msgid "_Edit"
+msgstr "B_earbeiten"
+
+#: lib/musicextras/gui/glade-msg.c:15
+msgid "Send new song information"
+msgstr "Neue Lied-Informationen schicken"
+
+#: lib/musicextras/gui/glade-msg.c:16
+msgid "_Change Song"
+msgstr "Lied we_chseln"
+
+#: lib/musicextras/gui/glade-msg.c:17
+msgid "More Information"
+msgstr "Mehr Information"
+
+#: lib/musicextras/gui/glade-msg.c:18
+msgid "Years Active"
+msgstr "Aktive Jahre"
+
+#: lib/musicextras/gui/glade-msg.c:19
+msgid "Biography"
+msgstr "Biografie"
+
+#: lib/musicextras/gui/glade-msg.c:20
+msgid "Album Review"
+msgstr "Album-Kritik"
+
+#: lib/musicextras/gui/glade-msg.c:21
+msgid "Change Song"
+msgstr "Lied wechseln"
+
+#: lib/musicextras/gui/glade-msg.c:22
+msgid "<b>Song Information</b>"
+msgstr "<b>Mehr Information</b>"
+
+#: lib/musicextras/gui/glade-msg.c:23
+msgid "Artist:"
+msgstr "Künstler:"
+
+#: lib/musicextras/gui/glade-msg.c:24
+msgid "Title:  "
+msgstr "Titel:  "
+
+#: lib/musicextras/gui/glade-msg.c:25
+msgid "Album:"
+msgstr "Album:"

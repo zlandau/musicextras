@@ -1,0 +1,57 @@
+Changes in 0.6.5
+    - The Song Change dialog information defaults to current song
+
+Changes in 0.6.4
+    - AllMusic plug fixed after allmusic.com site redesign
+
+Changes in 0.6.3
+    - Fixed bug related to images not showing up
+    - Fixed bug where musicextras directory wasn't being created properly
+    - Other small bugfixes
+
+Changes in 0.6.2
+    - Added plugin for atame.org
+    - Added Unicode support (See README)
+    - Added German and Spanish translations
+    - Added ability to specify what information to fetch
+    - Added ability to specify which plugins to use
+    - Added ID3v2 tag support
+    - Added album regex support (see config.rb)
+    - Added Change Song dialog to GUI
+    - Bugfixes
+
+Changes in 0.6.1
+    - Added 'Edit' option to edit lyrics (Right click on GUI)
+    - Added 'More Information' option (Right click on GUI)
+    - Lyrics formatting improved
+    - Implemented artist regex support (see config.rb)
+    - Page caching to speed up response time
+    - Miscellaneous features, bugfixes, and improved result matching
+
+Changes in 0.6.0
+    - Almost complete rewrite.
+    - GUI interaction works much better. Bug where multiple GUIs would display
+      at once has been fixed.
+    - Better plugin architecture.
+    - Smarter cache. Won't try to redownload items that the plugins were
+      previously unable to find. (use musicextras -c to clear the list of
+      what failed)
+    - Album cover support.
+    - musicextras binary automatically put in bindir
+    - Upgraded GUI from Gtk to Gtk2.
+      
+Changes in 0.5.2
+    - Image support. Only album cover images are implemented so far.
+    - -l and --lyrics is deprecated. It is just assumed now.
+    - Printing to stdout works without Gtk being installed
+    - musicextras binary will work when symlinked in /usr/bin etc
+    - Better pid handling
+    - Ability to enter Edit mode from regular mode
+    - Bugfixes.
+
+Changes in 0.5.1
+    - Fixed bug where old screen would never close, regardless of
+      'Stay Open' flag
+
+Changes in 0.5.0
+    - Initial Release

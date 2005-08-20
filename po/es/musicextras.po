@@ -1,0 +1,175 @@
+# Translation file for musicextras
+# Copyright (C) 2004 Zachary P. Landau
+# Zachary P. Landau <kapheine@hypa.net>, 2004.
+# Guillermo Schimmel <guille@schimmel.com.ar>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: home 2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-02 18:26-0500\n"
+"PO-Revision-Date: 2004-03-18 15:17-0300\n"
+"Last-Translator: Guillermo Schimmel <guille@schimmel.com.ar>\n"
+"Language-Team: Zachary P. Landau <kapheine@hypa.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: pusher.rb:72 pusher.rb:130
+msgid "Usage"
+msgstr "Modo de uso"
+
+#: pusher.rb:79
+msgid "Invalid fetcher: #{x}"
+msgstr "Fetcher inválido: #{x}"
+
+#: pusher.rb:97
+msgid "Connection refused. Make sure musicextras-gui is running on %s:%s."
+msgstr "Conección rechazada. Verifique que musicextras-gui esté corriendo en %s:%s."
+
+#: pusher.rb:132
+msgid "specify artist"
+msgstr "especifique un artista"
+
+#: pusher.rb:135
+msgid "specify album"
+msgstr "especifique un album"
+
+#: pusher.rb:138
+msgid "specify song title"
+msgstr "especifique el nombre de la canción"
+
+#: pusher.rb:141
+msgid "specify file to read mp3 tag from"
+msgstr "especifique el archivo mp3 desde el que quiere leer la información"
+
+#: pusher.rb:160
+msgid "display information using gui (default)"
+msgstr "mostrar la informacion usando la interface gráfica (default)"
+
+#: pusher.rb:164
+msgid "display information to stdout"
+msgstr "mostrar la informacion en stdout"
+
+#: pusher.rb:168
+msgid "be verbose"
+msgstr "mostrar mensajes"
+
+#: pusher.rb:175
+msgid "comma-separated list of fetchers to use"
+msgstr "lista separada por coma de fetchers a usar"
+
+#: pusher.rb:179
+msgid "comma-separated list of fetchers to exclude"
+msgstr "lista separada por coma de fetchers a excluir"
+
+#: pusher.rb:182
+msgid "display available fetchers"
+msgstr "mostrar fetchers disponibles"
+
+#: pusher.rb:183
+msgid "Valid fetchers:"
+msgstr "Fetchers válidos"
+
+#: pusher.rb:190
+msgid "comma-separated list of plugins to use"
+msgstr "lista separada por comas de plugins a usar"
+
+#: pusher.rb:194
+msgid "comma-separated list of plugins to exclude"
+msgstr "lista separada por comas de plugins a excluir"
+
+#: pusher.rb:197
+msgid "display available plugins"
+msgstr "mostrar plugins disponibles"
+
+#: pusher.rb:198
+msgid "Valid plugins:"
+msgstr "Plugins válidos"
+
+#: pusher.rb:209
+msgid "clears the greylist and exits"
+msgstr "borra la lista gris y sale"
+
+#: pusher.rb:211
+#, python-format
+msgid "Clearing the greylist in %s"
+msgstr "Borrando la lista gris en %s"
+
+#: pusher.rb:216
+msgid "displays this usage"
+msgstr "muestra estas instrucciones de uso"
+
+#: pusher.rb:220
+msgid "displays version information"
+msgstr "muestra la información de versión"
+
+#: pusher.rb:229
+#, python-format
+msgid "%s: invalid option -- %s"
+msgstr "%s: opción inválida -- %s"
+
+#: pusher.rb:306
+msgid "Retrieving lyrics.."
+msgstr "Bajando letra..."
+
+#: pusher.rb:312
+msgid "Notice: not retrieving lyrics (missing title or artist)"
+msgstr "Aviso: no se baja la letra (falta título o artista)"
+
+#: pusher.rb:329
+msgid "No lyrics plugin loaded."
+msgstr "No hay ningun plugin de letra cargado."
+
+#: pusher.rb:331
+msgid "No lyrics found."
+msgstr "No se ha encontrado ninguna letra."
+
+#: pusher.rb:341
+msgid "Retrieving artist image.."
+msgstr "Bajando imagen del artista..."
+
+#: pusher.rb:358
+msgid "Notice: not retrieving artist image (missing artist)"
+msgstr "Aviso: no se baja la imagen del artista (falta nombre del artista)"
+
+#: pusher.rb:368
+msgid "Retrieving album cover.."
+msgstr "Bajando tapa del disco..."
+
+#: pusher.rb:386
+msgid "Notice: not retrieving album cover (missing album or artist)"
+msgstr "Aviso: no se baja la portada del disco (falta album o artista)"
+
+#: pusher.rb:395
+msgid "Retrieving biography.."
+msgstr "Bajando biografía..."
+
+#: pusher.rb:412
+msgid "No biography found."
+msgstr "No se ha encontrado la biografía."
+
+#: pusher.rb:414
+msgid "Notice: not retrieving biography (missing artist)"
+msgstr "Aviso: no se baja la biografía (falta nombre del artista)"
+
+#: pusher.rb:422
+msgid "Retrieving album review.."
+msgstr "Bajando comentario del disco..."
+
+#: pusher.rb:440
+msgid "No album review found."
+msgstr "No se ha encontro comentario del disco."
+
+#: pusher.rb:442
+msgid "Notice: not retrieving album review (missing album or artist)"
+msgstr "Aviso: no se baja comentario  del disco (falta album o artista)"
+
+#: pusher.rb:450
+msgid "Retrieving years active.."
+msgstr "Bajando años de carrera..."
+
+#: pusher.rb:468
+msgid "Notice: not retrieving years active (missing artist)"
+msgstr "Aviso: no se baja años activo (falta artista)"

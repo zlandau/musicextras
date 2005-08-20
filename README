@@ -1,0 +1,146 @@
+musicextras: Automatically download song information
+Copyright (C) 2003-2004 Zachary P. Landau <kapheine@hypa.net>
+
+= Description
+
+Musicextras is a program for downloading extra information for songs. Currently
+it retrieves lyrics, artist images, and album covers. It was designed to make
+it retrieve new datatypes.
+
+There is now a rubyforge page at http://rubyforge.org/projects/musicextras/
+You may report bugs, desired plugins, problems with songs not being found that
+should be, etc, there.
+
+= Dependencies
+
+ Ruby 1.8.1 - http://www.ruby-lang.org
+ ruby-gnome2 - http://ruby-gnome2.sourceforge.jp
+ mp3info - http://rubyforge.org/projects/ruby-mp3info/
+ ruby-gettext (optional) - http://ponx.s5.xrea.com/hiki/ruby-gettext.html
+
+= Installation
+
+  $ ruby setup.rb config [--disable-nls]
+  $ ruby setup.rb setup
+ ($ su)
+  # ruby setup.rb install
+
+You probably want to edit RUBYLIB/musicextras/musicextrasrc.rb. See Usage below.
+
+= Upgrading
+
+If you are installing over an old version, I suggest you remove the greylist
+since new versions may have improved the success rate for matches. You may 
+delete it by using
+
+  $ musicextras -c
+
+Also, you may even want to delete all of the cached results. Sometimes there
+are changes that affect the lyrics formatting and things like that. This is
+the case when upgrading from 0.6.1 to 0.6.2. To remove the cache files if they
+are in the default directory, you may use:
+
+  $ musicextras --clear-cache
+
+= Plugins
+
+The system works by using plugins for various sites. Look in musicsites/ for
+examples. If you build the rdocs ('rake rdoc') more extensive plugin
+documentation is included with the MusicSite class.
+
+If you write a plugin, please send it to me so I can distribute it with the
+program. If you know of a good lyrics site and don't have the ability to write
+your own plugin, let me know of it and maybe I'll write one for it.
+
+If the debugging option is used (-d), plugins will log information to
+$HOME/.musicextras/debug.log This will help you determine what plugins are
+never finding anything good, etc.  If you decide a plugin is useless for you,
+you can specify which ones you want to use in musicextrasrc.rb. Run
+'musicextras --list-plugins to see which ones you may want.
+
+= Usage
+
+Look over the settings in $RUBYLIB/musicextras/musicextrasrc.rb. If you make
+changes you probably want to copy config.rb to
+$HOME/.musicextras/musicextrasrc.rb so the changes will not be overwritten when
+you upgrade.
+
+If you just want to print lyrics to the screen, try musicextras --help to see
+the options for that. But you probably want the gui, so first:
+
+  $ musicextras-gui
+
+The GUI should load but be blank. Then run musicextras with the options
+you want. This will fetch the information and send it to the GUI.
+
+The recommended way is to run it with your mp3 player. To set it up in xmms,
+you should use the song_change plugin. Go to
+Options->Preferences->Effects/General Plugins, click on Song Change and then
+Configure. The song change command should be something like:
+
+  musicextras -g -f "%f"
+
+Make sure you click 'Enable plugin'
+
+The cache keeps a list of items that the plugins were unable to find and does
+not attempt to download them again. Every once in a while you may want to clear
+this list in case some of the plugin sites add new content. To clear the list,
+run 'musicextras --clear-greylist'.
+
+= Internationalization
+
+There are a few things to know about the internationalization support in
+musicextras. By default, musicextras assumes input from the keyboard or mp3
+files is ISO-8859-1. To change this, set LANG to the charset you use. For
+example:
+
+  LANG=ru_RU.utf8 musicextras -f MyRussianMp3.mp3
+
+This will automatically use ISO-8859-5.
+
+If ruby-gettext is installed on your machine, setting LANG will also cause
+musicextras and musicextras-gui to use strings translated into that language,
+if available. Note: use the unicode version for your language. For example,
+
+  LANG=es_ES.utf8 musicextras-gui
+
+= Using Only The Library
+
+The previous instructions were for using the frontend included. It should be
+very easy to incorporate the data fetching in your own program, however. Here
+is a simple example. Suppose you want to wanted to print out the lyrics to a
+song.
+
+  require 'musicextras/song'
+  require 'musicextras/musicsites/_load_sites'	# This loads the plugins
+
+  MusicExtras::MusicSite::activate_plugins
+  puts MusicExtras::Song.new('I Palindrome I, 'They Might Be Giants').lyrics
+
+To see a list of available accessors after your plugins are loaded, try this:
+
+  require 'musicextras/artist'
+  require 'musicextras/musicsites/_load_sites'
+
+  MusicExtras::MusicSite::activate_plugins
+  puts MusicExtras::Artist.accessors
+
+That's it.
+
+= Writing a GUI
+
+At the moment, there is only a GTK Gui. It should be fairly easy to implement
+one with another toolkit, however. Just make your GUI a subclass of Gui (gui.rb)
+and use that as a template. The gtkgui.rb file will probably help too.
+
+It'd be nice to have a Gui for a crossplatform toolkit, like wxWindows (hint hint).
+
+= Bugs
+
+See the BUGS list for the full list. 
+
+= Contact
+
+* URL: http://kapheine.hypa.net/musicextras/
+* Email: kapheine@hypa.net
+* GPG Key: http://kapheine.hypa.net/kapheine.asc

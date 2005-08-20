@@ -1,0 +1,1 @@
+add_bool_config('disable-nls', false, 'disable NLS')

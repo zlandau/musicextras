@@ -1,0 +1,4 @@
+* guicontrol.rb  - Songs still get out of sync sometimes. It has to do with disconnecting extra clients.
+* gtkgui.rb      - Replace image before calling .show on it.
+* plyrics.rb     - Seems to get 'uninitialized constant Net::HTTP' every now and then
+* all plugins    - Sometimes plugins seem to randomly quit out (turn exceptions on to check this)
