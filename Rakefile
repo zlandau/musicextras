@@ -41,13 +41,15 @@ task :release do
   dir = "../musicextras-#{ENV['VERSION']}"
   sh "cp -r doc #{SITE_DIR}"
   #sh "svn copy file:///home/kapheine/svn/musicextras/musicextras file:////home/kapheine/svn/musicextras/musicextras-#{ENV['VERSION']}"
-  sh "svn export . #{dir}"
-  sh "svn log -r HEAD:1 -v > #{dir}/ChangeLog"
-  sh "cp NEWS #{dir}/ChangeLog #{SITE_DIR}"
+  #sh "svn export . #{dir}"
+  sh "darcs get . #{dir}"
+  rm_rf "#{dir}/_darcs"
+  sh "darcs changes >#{dir}/ChangeLog"
+  sh "cp #{dir}/NEWS #{dir}/ChangeLog #{SITE_DIR}"
   cd dir
   sh "rake package"
-  sh "cp #{dir}/musicextras-* #{SITE_DIR}"
-  sh "mv #{dir}/musicextras-* #{CODE_DIR}"
+  #sh "cp #{dir}/musicextras-* #{SITE_DIR}"
+  #sh "mv #{dir}/musicextras-* #{CODE_DIR}"
   puts "Don't forget to make a copy of the release in subversion using: "
   puts "svn copy file:///home/kapheine/svn/musicextras/musicextras file:////home/kapheine/svn/musicextras/musicextras-#{ENV['VERSION']}"
 
@@ -65,10 +67,12 @@ desc "Packages up current release"
 task :package => [:clean]
 task :package do
   base = File.basename(Dir.pwd)
-  sh "tar -zcf #{base}.tar.gz ../#{base} --exclude '*.tar.*'"
-  sh "tar -jcf #{base}.tar.bz2 ../#{base} --exclude '*.tar.*'" 
-  sh "gpg -sab #{base}.tar.gz"
-  sh "gpg -sab #{base}.tar.bz2"
+  #sh "tar -zcf #{base}.tar.gz ../#{base} --exclude '*.tar.*'"
+  #sh "tar -jcf #{base}.tar.bz2 ../#{base} --exclude '*.tar.*'" 
+  sh "tar -zcf ../#{base}.tar.gz ../#{base}"
+  sh "tar -jcf ../#{base}.tar.bz2 ../#{base}" 
+  sh "gpg -sab -o ../#{base}.tar.gz.asc ../#{base}.tar.gz"
+  sh "gpg -sab -o ../#{base}.tar.bz2.asc ../#{base}.tar.bz2"
 end
 
 Rake::TestTask.new(:test) do |t|
