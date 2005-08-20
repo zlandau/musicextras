@@ -48,11 +48,10 @@ task :release do
   sh "cp #{dir}/NEWS #{dir}/ChangeLog #{SITE_DIR}"
   cd dir
   sh "rake package"
-  #sh "cp #{dir}/musicextras-* #{SITE_DIR}"
-  #sh "mv #{dir}/musicextras-* #{CODE_DIR}"
-  puts "Don't forget to make a copy of the release in subversion using: "
-  puts "svn copy file:///home/kapheine/svn/musicextras/musicextras file:////home/kapheine/svn/musicextras/musicextras-#{ENV['VERSION']}"
-
+  sh "cp #{dir}/musicextras-* #{SITE_DIR}"
+  sh "mv #{dir}/musicextras-* #{CODE_DIR}"
+  puts "Don't forget to make a copy of the release in darcs using: "
+  puts "darcs tag musicextras-#{ENV['VERSION']}"
 end
 
 desc "Generate musicextras.pot"
