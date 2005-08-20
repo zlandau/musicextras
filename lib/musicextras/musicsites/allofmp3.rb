@@ -102,10 +102,9 @@ module MusicExtras
       end
 
       if body !~ /.*the search engine found 0 documents.*/
-	body.scan(/<a href="([^"]*)">([^<]*)<\/a><\/td>/mi) do |url, name|  
+        body.scan(/<a href="(http:\/\/catalog.allofmp3.com\/mcatalog.shtml\?group=\d+&albref=\d+)"[^>]*>([^<]*)<\/a>/) do |url, name|
           debug_var { :url }
 	  if match?(@artist.name, name)
-	    #return fetch_page("#{url}")
 	    return fetch_page(url.to_s)
 	  else
 	    debug(1, "artist page for #{@artist.name} not found")
@@ -117,7 +116,7 @@ module MusicExtras
         debug(1, "artist page for #{@artist.name} not found")
 	return nil
       else
-	return body
+	return nil
       end
 
     end
@@ -129,8 +128,14 @@ module MusicExtras
 
       page = get_artist_page()
 
+      albref = nil
+
 	if page
-	  page.scan(/<a href="([^']*)'[^<]*<\/script>\r\n<b>([^<]*)<\/a><\/td>/mi) do |url, name|
+      page.scan(/var albref\s+= '(\d+)'/m) do |albref|
+        page_albref = albref.to_s
+      end
+            page.scan(/<a href="(http:\/\/songs.?\.allofmp3.com\/.*?mcatalog.shtml).*?<b>([^<]*)</mi) do |url, name|
+              url = "#{url}?albref=#{albref}"
 	    debug(5, "#{name} => #{url}")
 	    albums<< [name, url]
 	  end

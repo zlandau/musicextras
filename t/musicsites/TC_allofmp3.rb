@@ -46,9 +46,9 @@ class TC_Allofmp3 < Test::Unit::TestCase
   def test_get_album_url
     @site.artist.name = 'Jimmy Buffett'
     @site.album.title = 'Volcano'
-    assert_match(/http:\/\/songs.?\.allofmp3\.com\/mcatalog\.shtml\?group=7494&album=2/, @site.get_album_url)
+    assert_match(/http:\/\/songs.?\.allofmp3\.com\/.*?group_7494\/album_2/, @site.get_album_url)
     @site.album.title = 'Meet Me in Margaritaville'
-    assert_match(/http:\/\/songs.?\.allofmp3\.com\/mcatalog\.shtml\?group=7494&album=3/, @site.get_album_url)
+    assert_match(/http:\/\/songs.?\.allofmp3\.com\/.*?group_7494\/album_3/, @site.get_album_url)
   end
 
   def test_get_album_cover_url
