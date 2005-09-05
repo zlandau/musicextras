@@ -48,8 +48,8 @@ task :release do
   sh "cp #{dir}/NEWS #{dir}/ChangeLog #{SITE_DIR}"
   cd dir
   sh "rake package"
-  sh "cp #{dir}/musicextras-* #{SITE_DIR}"
-  sh "mv #{dir}/musicextras-* #{CODE_DIR}"
+  sh "cp ../musicextras-#{ENV['VERSION']}.* #{SITE_DIR}"
+  sh "mv ../musicextras-#{ENV['VERSION']}.* #{CODE_DIR}"
   puts "Don't forget to make a copy of the release in darcs using: "
   puts "darcs tag musicextras-#{ENV['VERSION']}"
 end
