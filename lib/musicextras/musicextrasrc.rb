@@ -38,6 +38,9 @@
 ## Host:Port for GUI to use for data exchange with the client
 @config['gui_host'] = 'localhost:1665'
 
+## URL to get plugin updates from
+@config['updateurl'] = 'http://divineinvasion.net/musicextras/plugins'
+
 ## Substitutions called on Artist's names before any pages are fetched
 ## The first item is the regexp to apply, the second is the replacement text.
 ## \1 \2 \3 etc reference any text captured by ()s in the first regexp

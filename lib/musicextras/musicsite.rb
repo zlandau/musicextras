@@ -280,6 +280,50 @@ module MusicExtras
     def test
       [nil, []]
     end
+
+    ## Search config['updateurl'] remote site for any plugin updates,
+    ## saving the updates to the search path if any updates are found
+    ## Returns the number of plugins updated
+    def self.update(verbose=false)
+      num_updated = 0
+      config = MConfig.instance
+      uri_parse = URI.parse(File.join(config['updateurl'], 'INDEX'))
+      host = uri_parse.host
+      path = uri_parse.path
+      data = nil
+      if ENV['HTTP_PROXY']
+        uri_parse = URI.parse(ENV['HTTP_PROXY'])
+        conn = Net::HTTP.Proxy(uri_parse.host, uri_parse.port || 8080)
+      else
+        conn = Net::HTTP
+      end
+      conn.start(host) do |http|
+        http.read_timeout = config['timeout']
+        response = http.get(path)
+        data = response.body
+      end
+
+      sitebase = File.join(File.dirname(__FILE__), "musicsites")
+      data.scan(/(.*?) (.*?)\n/m) do |md5, file|
+        path = File.find_in_path("musicextras/musicsites/#{file}", $LOAD_PATH)
+        #puts("md5: #{md5} #{Digest::MD5.hexdigest(File.read(path))} #{path}")
+        if Digest::MD5.hexdigest(File.read(path)) != md5 
+          puts "Updating #{file}..." if verbose
+          url = File.join(config['updateurl'], file)
+          conn.start(host) do |http|
+            http.read_timeout = config['timeout']
+            response = http.get(url)
+            data = response.body
+            writepath = File.join(config['basedir'], 'musicextras', 'musicsites')
+            FileUtils.mkdir_p(File.join(writepath))
+            File.open(File.join(writepath, file), "w") { |f| f.write(data) }
+            num_updated += 1
+          end
+        end
+      end
+      
+      num_updated
+    end
   end
 
 end

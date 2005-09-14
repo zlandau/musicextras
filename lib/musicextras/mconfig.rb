@@ -40,7 +40,7 @@ module MusicExtras
     VALID = %w(basedir log verbose fetchers plugins use_cache gui_host 
                artist_pre_regex artist_cond_regex album_pre_regex window_w
                window_h image_size editor debug_level debug_io timeout
-	       greylist_timeout)
+	       greylist_timeout updateurl)
 
     DEFAULT_GUI_PORT = 1665
 

@@ -23,6 +23,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
+require 'musicextras/mconfig'
+$LOAD_PATH.unshift(MusicExtras::MConfig.instance['basedir'])
 require 'musicextras/musicsites/_load_sites'
 require 'musicextras/musicsite'
 require 'musicextras/album'
@@ -31,7 +33,6 @@ require 'musicextras/song'
 require 'musicextras/cache'
 require 'musicextras/guicontrol'
 require 'musicextras/debuggable'
-require 'musicextras/mconfig'
 require 'base64'
 require 'optparse'
 require 'ostruct'
@@ -291,6 +292,16 @@ module MusicExtras
 	opts.on("-T", "--test", _("runs tests to see if plugins are working")) do
 	  @options.run_tests = true
 	end
+
+        opts.on("-u", "--update", _("update the plugins")) do
+          num_updated = MusicSite.update(@options.verbose)
+          puts "#{num_updated} plugin(s) updated" if @options.verbose
+          if num_updated > 0
+            exit 1
+          else
+            exit 0
+          end
+        end
 
         opts.on("-h", "--help", _("displays this usage")) do
           puts opts
