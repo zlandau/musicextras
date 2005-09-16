@@ -2,6 +2,8 @@ require 'rake/packagetask'
 require 'rake/rdoctask'
 require 'rake/testtask'
 
+require "digest/md5"
+
 desc "Default Task"
 task :default => :test
 
@@ -72,6 +74,18 @@ task :package do
   sh "tar -jcf ../#{base}.tar.bz2 ../#{base}" 
   sh "gpg -sab -o ../#{base}.tar.gz.asc ../#{base}.tar.gz"
   sh "gpg -sab -o ../#{base}.tar.bz2.asc ../#{base}.tar.bz2"
+end
+
+desc "Update the plugins list"
+task :update_plugins do
+  index = "/home/kapheine/public_html/hypa-src/musicextras/plugins/INDEX"
+  File.open(index, "w") do |f|
+    Dir["lib/musicextras/musicsites/*.rb"].each do |name|
+      if name.match("_load_sites.rb") then next end
+      md5 = Digest::MD5.hexdigest(File.read(name))
+      f.write("#{md5} #{File.basename(name)}\n")
+    end
+  end
 end
 
 Rake::TestTask.new(:test) do |t|
