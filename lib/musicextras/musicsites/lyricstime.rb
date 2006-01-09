@@ -66,7 +66,7 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      return extract_text(page, /<td class="lyrics">.*?\n(.*?)<br><br>\n/m) + source()
+      return extract_text(page, /<span>lyrics<\/span>(.*?)<\/p><\/div>/)
     end
 
     # Fetches album cover from the site, returning the image as binary
@@ -100,7 +100,7 @@ module MusicExtras
       if (char == '0' || (char.to_i >= 1 && char.to_i <= 9))
 	char = '0-9'
       end
-      return "/#{char}/"
+      return "/#{char}.html"
     end
 
     # Fetches the url that lists an artist's songs or returns nil if artist
@@ -117,8 +117,8 @@ module MusicExtras
 	debug(1, "could not fetch page for #{song.artist.name}")
 	return nil
       end
-      page.scan(/<a href="\/artist\/([\w\s\-\|\(\)\:\+\?]+?)\/" title="(.*?) lyrics">(.*?)<\/a>/i) do |url, name|
-	return "/artist/#{url}/" if match?(artist, name)
+      page.scan(/<a href=\"([^"]*)\"><strong>([^<]*)<\/strong>/) do |url, name|
+	return url if match?(artist, name)
       end
 
       debug(1, "could not find url for #{artist}")
@@ -133,8 +133,8 @@ module MusicExtras
       debug_var { :artist_url }
       page = fetch_page(artist_url)
       return nil if !page
-      page.scan(/<a title="(.*?) lyrics" href=\/lyrics\/(\d+).html>(.*?)<\/a><br>/i) do |name, url|
-	return "/lyrics/#{url}.html" if match?(@song.title, name, true)
+      page.scan(/<a href="([^"]*)"><b>[^<]*<\/b>([^<]*)<b>/) do |url, name|
+	return url if match?(@song.title, name, true)
       end
 
       debug(1, "could not find url for #{@song.title} by #{@song.artist.name}")
@@ -148,7 +148,7 @@ module MusicExtras
       return nil if !artist_url
       page = fetch_page(artist_url)
       return nil if !page
-      page.scan(/<img alt.*?album : (.*?)" title=.*? src="(.*?)" width=133 height=133>/) do |name, url|
+      page.scan(/"clear">([^<]*)<\/h2><div class="ainfo"><img src="([^"]*)"\/>/) do |name, url|
 	if match?(@song.album.title, name, true)
 	  if url == NO_COVER_URL
 	    break
