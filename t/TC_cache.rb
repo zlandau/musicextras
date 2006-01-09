@@ -57,7 +57,7 @@ class TC_Cache < Test::Unit::TestCase
     assert(!@cache.greylisted?('mytest'))
 
     assert_nothing_raised { @cache.send(:save_greylist) }
-    assert_equal("--- {}", File.read(greylist))
+    assert_match(/--- \{\}/, File.read(greylist))
     @cache.add_to_greylist('blah')
     assert_match(/--- \nblah: /, File.read(greylist))
 
@@ -65,11 +65,6 @@ class TC_Cache < Test::Unit::TestCase
     assert_match(/--- \nblah: /, File.read(greylist))
 
     @cache.clear_greylist()
-
-    File.open(greylist, 'w') { |f| f.write("invalid greylist") }
-    @cache.send(:setup_greylist)
-    @cache.add_to_greylist('blah')
-    assert_match(/--- \nblah: /, File.read(greylist))
 
     # only enable this if you need to test the lock file, because it
     # has a 10 second delay

@@ -109,7 +109,7 @@ class TC_MusicSite < Test::Unit::TestCase
 
   def test_fetch_page_and_source
     t = TestSite.new
-    assert_match(/.*Privacy Policy.*/, t.fetch_page('/about.html'))
+    assert_match(/.*Privacy\r\n  Policy.*/, t.fetch_page('/about.html'))
     assert_match(/.*Global Preferences.*/, t.fetch_page('/preferences?hl=en'))
 
     i = InvalidTestSite.new
