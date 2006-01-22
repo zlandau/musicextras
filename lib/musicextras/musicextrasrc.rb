@@ -26,11 +26,11 @@
 
 ## What information should be fetched? Use musicextras --list-fetchers for a list
 ## Defaults to all available fetchers
-#@config['fetchers'] = %w(lyrics artist_image album_cover biography years_active album_review album_tracks album_year)
+#@config['fetchers'] = %w(lyrics synced_lyrics artist_image album_cover biography years_active album_review album_tracks album_year)
 
 ## What plugins should be used? Use musicextras --list-plugins for a list
 ## Defaults to all available plugins
-#@config['plugins'] = %w(Atame LyricsTime Plyrics AllMusic LyricsNet)
+#@config['plugins'] = %w(Atame Allofmp3 Lrcdb LyricsDomain LyricsTime Plyrics AllMusic LyricsNe )
 
 # Save and load data from cache (if false, fetches data every time)
 @config['use_cache'] = true
