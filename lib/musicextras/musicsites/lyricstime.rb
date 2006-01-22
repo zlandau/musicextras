@@ -81,7 +81,6 @@ module MusicExtras
       debug_var { :song_url }
       page = fetch_page(song_url)
       l = extract_text(page, %r!<span>lyrics</span></a></b>"</p><p>(.*?)</p>!)
-      debug_var { :l }
       return l
     end
 
