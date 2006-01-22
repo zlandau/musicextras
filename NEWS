@@ -1,5 +1,8 @@
 Changes in 0.6.8
     - Added --update option to retrieve plugin updates from a server
+    - Added LyricsDomain plugin (contributed by Tony Cebzanov)
+    - Added Lrcdb plugin with synced_lyrics support (contributed by Tony Cebzano)
+    - Fixed Allofmp3, LyricsTime, and PLyrics (contributed by Tony Cebzanov)
 
 Changes in 0.6.7
     - Updated AllOfMp3 and LyricsNet plugins
