@@ -31,64 +31,26 @@ class TC_LyricsTime < Test::Unit::TestCase
     assert_equal('www.lyricstime.com', @site.url)
   end
 
-  def test_get_artist_list_url
-    @site.song.artist.name = 'Aerosmith'
-    assert_equal('/A/', @site.get_artist_list_url)
+  def test_urlify
+    @site.song.artist.name = 'Refused'
+    assert_equal('refused', @site.urlify(@site.song.artist.name))
     @site.song.artist.name = 'Agent 5 / 9'
-    assert_equal('/A/', @site.get_artist_list_url)
+    assert_equal('agent-5-9', @site.urlify(@site.song.artist.name))
     @site.song.artist.name = 'ZZ Top'
-    assert_equal('/Z/', @site.get_artist_list_url)
+    assert_equal('zz-top', @site.urlify(@site.song.artist.name))
     @site.song.artist.name = '98 Mute'
-    assert_equal('/0-9/', @site.get_artist_list_url)
-  end
-
-  def test_get_artist_url
-    @site.song.artist.name = 'Refused'
-    assert_equal('/artist/refused/', @site.get_artist_url)
-    @site.song.artist.name = 'Agent 5 / 9'
-    assert_equal('/artist/agent-5-|-9/', @site.get_artist_url)
-    @site.song.artist.name = 'ZZ Top'
-    assert_equal('/artist/zz-top/', @site.get_artist_url)
-    @site.song.artist.name = '98 Mute'
-    assert_equal('/artist/98-mute/', @site.get_artist_url)
+    assert_equal('98-mute', @site.urlify(@site.song.artist.name))
     @site.song.artist.name = 'Distillers'
-    assert_equal('/artist/distillers/', @site.get_artist_url)
-    @site.song.artist.name = 'IDontExist'
-    assert_nil(@site.get_artist_url)
-  end
-
-  def test_get_song_url
-    @site.song.artist.name = 'Refused'
-    @site.song.title = 'Summer Holidays Vs. Punk Routine'
-    assert_equal('/lyrics/43300.html', @site.get_song_url)
-    @site.song.title = 'Summer Holidays Vs Punk Routine'
-    assert_equal('/lyrics/43300.html', @site.get_song_url)
-
-    @site.song.artist.name = 'Distillers'
-    @site.song.title = 'I Am a Revenant'
-    assert_equal('/lyrics/46914.html', @site.get_song_url)
-
-    @site.song.artist.name = '98 Mute'
-    @site.song.title = 'A. C. A. B.'
-    assert_equal('/lyrics/40995.html', @site.get_song_url)
-  end
-
-  def test_get_album_cover_url
-    @site.song.artist.name = 'Refused'
-    @site.song.album.title = 'Songs To Fan The Flames Of Discontent'
-    assert_equal('/Cover/3690.JPG', @site.get_album_cover_url)
-    @site.song.album.title = 'Everlasting [ep]'
-    assert_equal('/Cover/3688.JPG', @site.get_album_cover_url)
-    @site.song.album.title = 'Doesnt Exist!'
-    assert_equal(nil, @site.get_album_cover_url)
+    assert_equal('distillers', @site.urlify(@site.song.artist.name))
   end
 
   def test_get_album_cover
     @site.song.artist.name = 'Refused'
     @site.song.album.title = 'Songs To Fan The Flames Of Discontent'
     cover = @site.cover(Album.new('Songs To Fan The Flames Of Discontent', 'Refused'))
+    File.open("blah.jpg", "w") { |f| f.write(cover) }
     assert_equal('fc52a4e24502205e8d32ec07dd864797',
-    @md5.digest(cover).unpack("H*").to_s)
+      @md5.digest(cover).unpack("H*").to_s)
     @site.song.album.title = 'Everlasting [ep]'
     cover = @site.cover(@site.song.album)
     assert_equal('e9efcd775870267bb6253ef1858c2315',

@@ -2,8 +2,9 @@
 #
 # Allofmp3 - www.allofmp3.com implementation of MusicSite
 #
-# Copyright (C) 2003-2004 Paul-henri Ferme <paul-henri.ferme@noos.fr>
+# Copyright (C) 2003-2006 Paul-henri Ferme <paul-henri.ferme@noos.fr>
 #                         Zachary P. Landau <kapheine@hypa.net>
+#                         Tony Cebzanov <tonyc@tonyc.org>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +62,7 @@ module MusicExtras
 
       page = get_artist_page
       return nil unless page
-      page.scan(/<td align="left" valign="top"[^<]*<img src="([^"]*)" border=1 [^>]*><\/td>/i) do |image_url|
+      page.scan(%r!<div class="albumcover">\s*<img src="([^"]+?)"!) do |image_url|
 	debug_var { :image_url }
 	return fetch_page(image_url.to_s)
       end 
@@ -91,8 +92,7 @@ module MusicExtras
     # Returns the page allofmp3 returns in a search for the artist.
     # Returns nil if something went wrong (including just not finding the page)
     def get_artist_page # :nodoc:
-      post = "range=all&searchaud=yes&rezult=ON&search=#{CGI::escape(@artist.name)}&x=0&y=0"
-      
+      post = "result=ON&search=#{CGI::escape(@artist.name)}&ybeg=0&yend=0&sg=1&sa=1&ss=1"
       debug_var { :post }
       body = fetch_page("http://search.allofmp3.com/search.shtml", post)
 
@@ -101,9 +101,11 @@ module MusicExtras
 	return nil
       end
 
-      if body !~ /.*the search engine found 0 documents.*/
-        body.scan(/<a href="(http:\/\/catalog.allofmp3.com\/mcatalog.shtml\?group=\d+&albref=\d+)"[^>]*>([^<]*)<\/a>/) do |url, name|
+      if body !~ /.*No entries found for.*/
+        body.scan(%r!<a href="(http://music.allofmp3.com/mp3/[^"]+)">((?:</?strong>|</?em>|[^>])+)</a>!) do |url, name|
+          name.gsub!(%r!</?[^>]+>!, "")
           debug_var { :url }
+          debug_var { :name }
 	  if match?(@artist.name, name)
 	    return fetch_page(url.to_s)
 	  else
@@ -134,8 +136,8 @@ module MusicExtras
       page.scan(/var albref\s+= '(\d+)'/m) do |albref|
         page_albref = albref.to_s
       end
-            page.scan(/<a href="(http:\/\/songs.?\.allofmp3.com\/.*?mcatalog.shtml).*?<b>([^<]*)</mi) do |url, name|
-              url = "#{url}?albref=#{albref}"
+      page.scan(%r!<a href="(http://music.allofmp3.com/[^']+?mcatalog\.shtml)'.*?;</script>\s*<strong>([^<]+)</strong></a>!) do |url, name|
+                url = "#{url}?albref=#{albref}"
 	    debug(5, "#{name} => #{url}")
 	    albums<< [name, url]
 	  end
@@ -173,7 +175,7 @@ module MusicExtras
       page = fetch_page(album_url)
       return nil if !page
 
-      page.scan(/<td valign="top"[^<]*<img src="([^"]*)" border=1 [^>]*><\/td>/i) do |image_url|
+      page.scan(%r!<div class="cover">\s*<img src="([^"]+?)"!) do |image_url|
 	debug_var { :image_url }
 	return image_url.to_s
       end 

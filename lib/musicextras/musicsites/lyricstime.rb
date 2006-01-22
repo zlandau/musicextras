@@ -4,7 +4,8 @@
 #
 # version: $Id: lyricstime.rb 331 2004-07-07 22:48:11Z kapheine $
 #
-# Copyright (C) 2003-2004 Zachary P. Landau <kapheine@hypa.net>
+# Copyright (C) 2003-2006 Zachary P. Landau <kapheine@hypa.net>
+#                         Tony Cebzanov <tonyc@tonyc.org>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -49,6 +50,14 @@ module MusicExtras
       Album::register_plugin(self, :cover, CACHE_PATH['album_cover'])
     end
 
+    def urlify(txt)
+      txt.gsub!(/[ ']/, "-") #'
+      txt.gsub!(%r![^\w\s-]+!, "")
+      txt.gsub!(/-+/, "-")
+      txt.downcase!()
+      return txt
+    end
+
     # Fetches lyrics from the site, returning the lyrics as string
     # [+song+] a Song object
     #
@@ -61,12 +70,19 @@ module MusicExtras
 	debug(1, "song title or artist not specified")
 	return nil
       end
-
-      song_url = get_song_url()
+  
+      artist = @song.artist.name
+      title = @song.title
+      a = urlify(artist)
+      t = urlify(title)
+      song_url = "http://www.lyricstime.com/#{a}-#{t}-lyrics.html"
+      debug_var { :song_url }
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      return extract_text(page, /<span>lyrics<\/span>(.*?)<\/p><\/div>/)
+      l = extract_text(page, %r!<span>lyrics</span></a></b>"</p><p>(.*?)</p>!)
+      debug_var { :l }
+      return l
     end
 
     # Fetches album cover from the site, returning the image as binary
@@ -78,87 +94,22 @@ module MusicExtras
       @album = new_album
       @song = Song.with_album('', @album)
 
-      unless @album.title and @album.artist.name
-	debug(1, "album title or artist name not specified")
-	return nil
-      end
-
-      album_cover_url = get_album_cover_url()
-      return nil unless album_cover_url
-      debug_var { :album_cover_url }
-      cover = fetch_page(album_cover_url)
-      return cover
-    end
-
-    # Fetches the url where the artists are listed.
-    # Warning: Assumes get_lyrics has checked for a valid Song object
-    #
-    # [+title+] May specify title if you don't want to use the default of song.title
-    def get_artist_list_url(title=nil) # :nodoc:
-      char = title ? title[0].chr.upcase : @song.artist.name[0].chr.upcase
-
-      if (char == '0' || (char.to_i >= 1 && char.to_i <= 9))
-	char = '0-9'
-      end
-      return "/#{char}.html"
-    end
-
-    # Fetches the url that lists an artist's songs or returns nil if artist
-    # is not found.
-    def get_artist_url # :nodoc:
-
       artist = @song.artist.name
 
-      artist_url = get_artist_list_url(artist)
-      return nil if !artist_url
+      a = urlify(artist)
+      artist_url = "http://www.lyricstime.com/#{a}-lyrics.html"
       debug_var { :artist_url }
       page = fetch_page(artist_url)
-      unless page
-	debug(1, "could not fetch page for #{song.artist.name}")
-	return nil
-      end
-      page.scan(/<a href=\"([^"]*)\"><strong>([^<]*)<\/strong>/) do |url, name|
-	return url if match?(artist, name)
-      end
-
-      debug(1, "could not find url for #{artist}")
-      return nil
-    end
-
-    # Fetches the url for an artist's song of returns nil if song is not found
-    # Calls get_artist_url
-    def get_song_url # :nodoc:
-      artist_url = get_artist_url()
-      return nil if !artist_url
-      debug_var { :artist_url }
-      page = fetch_page(artist_url)
-      return nil if !page
-      page.scan(/<a href="([^"]*)"><b>[^<]*<\/b>([^<]*)<b>/) do |url, name|
-	return url if match?(@song.title, name, true)
+      page.scan(%r!<h2 class="clear">([^<]+)</h2><div class="ainfo"><img src="([^"]+)"/>!) do |alb, album_cover_url|
+        next if album_cover_url == "./img/nc.gif"
+        if match?(alb, new_album.title)
+          cover = fetch_page(album_cover_url)
+          debug_var { :album_cover_url }  
+          return cover
+        end
       end
 
       debug(1, "could not find url for #{@song.title} by #{@song.artist.name}")
-      return nil
-    end
-
-    # Fetches the url for the album cover, returning nil if not found
-    # Calls get_artist_url
-    def get_album_cover_url # :nodoc:
-      artist_url = get_artist_url()
-      return nil if !artist_url
-      page = fetch_page(artist_url)
-      return nil if !page
-      page.scan(/"clear">([^<]*)<\/h2><div class="ainfo"><img src="([^"]*)"\/>/) do |name, url|
-	if match?(@song.album.title, name, true)
-	  if url == NO_COVER_URL
-	    break
-	  else
-	    return url
-	  end
-	end
-      end
-
-      debug(1, "could not find cover for #{@song.album.title} by #{@song.artist.name}")
       return nil
     end
 
@@ -171,12 +122,12 @@ module MusicExtras
       song = Song.new("Sweet Child O'Mine", artist)
 
       if !lyrics(song)
-	passed = false
-	problems << "lyrics"
+        passed = false
+        problems << "lyrics"
       end
       if !cover(album)
-	passed = false
-	problems << "album cover"
+        passed = false
+        problems << "album cover"
       end
 
       [passed, problems]

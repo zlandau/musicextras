@@ -4,7 +4,8 @@
 #
 # version: $Id: plyrics.rb 331 2004-07-07 22:48:11Z kapheine $
 #
-# Copyright (C) 2003-2004 Zachary P. Landau <kapheine@hypa.net>
+# Copyright (C) 2003-2006 Zachary P. Landau <kapheine@hypa.net>
+#                         Tony Cebzanov <tonyc@tonyc.org>
 # All rights reserved.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -61,7 +62,9 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      return extract_text(page, /<font size=2><b>.*?<\/b><br>(.*?)\[ <a href=\"http:\/\/www.plyrics.com\">www.plyrics.com<\/a> \]<br><br>/im) + source()
+      #return extract_text(page, %r!<font class="std_font"><b>"[^"]*"</b><br>\s*<br>\s*(.*?)\s*<br>\s*<br><font size="1">!im) + source() #"
+       return extract_text(page, /<font size=2><b>.*?<\/b><br>(.*?)\[ <a href=\"http:\/\/www.plyrics.com\">www.plyrics.com<\/a> \]<br><br>/im) + source()
+
     end
 
     # Fetches the url where the artists are listed.
@@ -86,6 +89,7 @@ module MusicExtras
       debug_var { :artist_url }
       page = fetch_page(artist_url)
       page.scan(/<A HREF=\"(.*?)\">(.*?)<\/a><br>/i) do |url, name|
+        name.gsub!(", THE", "")
 	return "/#{url}" if match?(artist, name, true)
       end
 
