@@ -107,6 +107,7 @@ module MusicExtras
     # Cache paths that plugins should use
     CACHE_PATH = {
         'lyrics'       => '{ARTIST}/{TITLE}.lyrics',
+        'synced_lyrics' => '{ARTIST}/{TITLE}.lrc',
         'biography'    => '{ARTIST}/biography.txt',
         'artist_image' => '{ARTIST}/{ARTIST}.img',
         'years_active' => '{ARTIST}/years_active.txt',
@@ -250,6 +251,7 @@ module MusicExtras
             unless post
               response = http.get(path, params)
             else
+	      params["Content-type"] = "application/x-www-form-urlencoded"
               response = http.post(path, post, params)
             end
 	    data = response.body

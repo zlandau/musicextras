@@ -72,7 +72,7 @@ module MusicExtras
 
       # May specify the order things are fetched in. Anything not listed
       # here will go in any order after those items in the list
-      @fetcher_order = %w(song_info lyrics artist_image album_cover album_year)
+      @fetcher_order = %w(song_info lyrics synced_lyrics artist_image album_cover album_year)
 
       if args.length == 0
         $stderr.puts "%s: musicextras <options>" % _("Usage")
@@ -434,6 +434,45 @@ module MusicExtras
 
       output_tag('LYRICS', lyrics)
       output_tag('LYRICS_FILE', Song.new(@options.title, @options.lyrics_artist).cached_as(:lyrics))
+    end
+  
+    ### Sends SYNCED_LYRICS => SyncedLyrics_Data tag to queue if lyrics are found,
+    ### nil otherwise
+    def handle_synced_lyrics
+      output_tag('STATUS', _('Retrieving synced lyrics..')) if @options.gui
+
+      unless @song
+        if @options.title && @options.artist
+          @song = Song.new(@options.title, @options.artist)
+        else
+          info _('Notice: not retrieving synced lyrics (missing title or artist)')
+          return
+        end
+      end
+
+      if @song
+        @options.lyrics_artist = @options.artist
+        begin
+          lyrics = @song.synced_lyrics
+
+          # If lyrics aren't found, start applying regex to the artist
+          unless lyrics
+            regexp_list(@options.artist, @config['artist_cond_regex'] ) do |a|
+              lyrics = Song.new(@options.title, a).synced_lyrics
+              if lyrics
+                @options.lyrics_artist = a
+                break
+              end
+            end
+          end
+        rescue DataAccessor::AccessorNotImplemented
+          lyrics = _('No synced lyrics plugin loaded.')
+        end
+        lyrics = _('No synced lyrics found.') if lyrics.nil?
+      end
+
+      output_tag('SYNCED_LYRICS', lyrics)
+      output_tag('SYNCED_LYRICS_FILE', Song.new(@options.title, @options.lyrics_artist).cached_as(:synced_lyrics))
     end
 
     ### Sends ARTIST_IMAGE => Binary_Data tag to queue if image is found,
