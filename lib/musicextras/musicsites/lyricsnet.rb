@@ -62,7 +62,6 @@ module MusicExtras
       debug_var { :song_url }
       page = fetch_page(song_url, nil, MusicSite::USERAGENTS['Mozilla'])
       return nil if !page
-      debug_dump("get_song_url.dump", page)
 
       page.gsub!(/(<td.*?>)/, '\1<br/><br/>')
       text = extract_text(page, 
