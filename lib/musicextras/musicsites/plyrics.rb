@@ -62,9 +62,7 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      #return extract_text(page, %r!<font class="std_font"><b>"[^"]*"</b><br>\s*<br>\s*(.*?)\s*<br>\s*<br><font size="1">!im) + source() #"
-       return extract_text(page, /<font size=2><b>.*?<\/b><br>(.*?)\[ <a href=\"http:\/\/www.plyrics.com\">www.plyrics.com<\/a> \]<br><br>/im) + source()
-
+      return extract_text(page, %r!<font [^>]*><b>"[^"]*"</b><br>\s*<br>\s*(.*?)\s*<br>\s*<br>\s*\[ <a !im) + source() #"
     end
 
     # Fetches the url where the artists are listed.
