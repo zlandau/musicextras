@@ -80,7 +80,7 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      l = extract_text(page, %r!<span>lyrics</span></a></b>"</p><p>(.*?)</p>!)
+      l = extract_text(page, %r!CODE BLOCK -->\s*</p>\s*<p>(.*?)</p>!m)
       return l
     end
 
@@ -99,7 +99,7 @@ module MusicExtras
       artist_url = "http://www.lyricstime.com/#{a}-lyrics.html"
       debug_var { :artist_url }
       page = fetch_page(artist_url)
-      page.scan(%r!<h2 class="clear">([^<]+)</h2><div class="ainfo"><img src="([^"]+)"/>!) do |alb, album_cover_url|
+      page.scan(%r!<h2 class="clear">([^<]+)</h2>\s*<div class="ainfo"><[^>]+><img src="([^"]+)" />!) do |alb, album_cover_url|
         next if album_cover_url == "./img/nc.gif"
         if match?(alb, new_album.title)
           cover = fetch_page(album_cover_url)

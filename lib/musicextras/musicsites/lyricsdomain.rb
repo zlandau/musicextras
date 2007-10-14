@@ -76,7 +76,7 @@ module MusicExtras
       return nil unless song_url
       debug_var { :song_url }
       page = fetch_page(song_url)
-      l = extract_text(page, %r!<pre>\s*\[.*?\] \[.*?\]\s*(.*?)</pre>!m)  #"
+      l = extract_text(page, %r!<p class="cnt">(.*?)<div!m)
       return l
     end
 

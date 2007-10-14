@@ -86,7 +86,7 @@ module MusicExtras
       return nil if !artist_url
       debug_var { :artist_url }
       page = fetch_page(artist_url)
-      page.scan(/<A HREF=\"(.*?)\">(.*?)<\/a><br>/i) do |url, name|
+      page.scan(/<A HREF=\"(.*?)\">(.*?)<\/a><\/h3>/i) do |url, name|
         name.gsub!(", THE", "")
 	return "/#{url}" if match?(artist, name, true)
       end

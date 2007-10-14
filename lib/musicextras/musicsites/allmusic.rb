@@ -41,7 +41,7 @@ module MusicExtras
     DESCRIPTION = 'Artist images, album covers, years active, biography and album reviews for many genres'
 
     ACCESS_VIOLATION_MSG = "Through traffic and monitoring of our websites" # see check_for_violation
-    COMMON_REGEX = '<a href="\/cg\/amg.dll\?p=amg&sql=([^"]*)">([^<]*)<\/a>'
+    COMMON_REGEX = %r!<a href="/cg/amg.dll\?p=amg&amp;sql=([^"]*)">([^<]*)<\/a>!mi
 
     def initialize
       super(NAME, URL)
@@ -126,7 +126,7 @@ module MusicExtras
 	return nil
       end
 
-      ma = bio_page.match(/class="title">Biography<\/td><td align="[^"]*" class="author">by\s*?([^<]*)<\/td>.*?<p>(.*?)<!--End Center Content/mi)
+      ma = bio_page.match(/class="title">Biography<\/td><td align="[^"]*" class="author".*?>by\s*?([^<]*)<\/td>.*?<p>(.*?)<!--End Center Content/mi)
 
       if ma
         extract_text(ma[2], /(.*)/mi) + "\nSource: #{ma[1]} from #{self.to_s}\n"
@@ -205,7 +205,7 @@ module MusicExtras
       body = fetch_page("/cg/amg.dll", post, MusicSite::USERAGENTS['Mozilla'])
 
       if body =~ /.*Name Search Results for.*/
-	body.scan(/#{COMMON_REGEX}/mi) do |url, name|
+	body.scan(COMMON_REGEX) do |url, name|
 	  debug_var { :url }
 	  if match?(@artist.name, name)
 	    return fetch_page("/cg/amg.dll?P=amg&sql=#{url}", nil, MusicSite::USERAGENTS['Mozilla'])
@@ -259,7 +259,7 @@ module MusicExtras
       album_pages.each do |url|
 	page = fetch_page(url, nil, MusicSite::USERAGENTS['Mozilla'])
 	if page
-	  page.scan(/#{COMMON_REGEX}/mi) do |url, name|
+	  page.scan(COMMON_REGEX) do |url, name|
 	    debug(5, "#{name} => #{url}")
 	    albums<< [name, url]
 	  end
@@ -310,7 +310,7 @@ module MusicExtras
 
       tracks = "\n"
       found = false
-      page.scan(/<TD class="cell">(\d*?)<\/TD>.*?<a href="\/cg\/amg.dll\?p=amg&sql=[^"]*">([^<]*)<\/a>/mi) do |num, name|
+      page.scan(/<TD class="cell">(\d+)<\/TD>.*?<TD class="cell" style[^>]*>\s*<a href="\/cg\/amg.dll\?p=amg&amp;sql=[^"]*">([^<]*)<\/a>/mi) do |num, name|
 	found = true
 	tracks += sprintf("%3i. %s\n", num, name)
       end
