@@ -97,7 +97,7 @@ module MusicExtras
       body = fetch_page("http://search.allofmp3.com/search.shtml", post)
 
       unless body
-	debug(1, "could not fetch page for @{artist.name}")
+	debug(1, "could not fetch page for #{@artist.name}")
 	return nil
       end
 
