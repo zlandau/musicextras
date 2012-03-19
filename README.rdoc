@@ -1,6 +1,11 @@
 musicextras: Automatically download song information
 Copyright (C) 2003-2004 Zachary P. Landau <kapheine@hypa.net>
 
+= Warning
+
+Musicextras works by using plugins that scrape webpages. There is almost no way
+these plugins still work. This is mostly here for historical purposes.
+
 = Description
 
 Musicextras is a program for downloading extra information for songs. Currently
